@@ -10,8 +10,8 @@ class CategoryController extends Controller
 {
     //list category
     public function listCategory(){
-       return $categories=Category::all();
-        return Inertia::render('Category/CategoryList',['categories'=>$categories]);
+        $categories=Category::all();
+        return Inertia::render('Category/CategoryListPage',['categories'=>$categories]);
     }
 
     //category save page

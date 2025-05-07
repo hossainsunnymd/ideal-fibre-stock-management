@@ -2,38 +2,58 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\DamageProduct;
-use App\Models\IssueProduct;
-use App\Models\RequisitionReceivedRequest;
 use Exception;
 use Inertia\Inertia;
 use App\Models\Product;
+use App\Models\IssueProduct;
 use Illuminate\Http\Request;
+use App\Models\DamageProduct;
+use Illuminate\Support\Facades\DB;
+use App\Models\RequisitionReceivedRequest;
 
 class ProductController extends Controller
 {
     //Product stock list
-    public function productStockList(){
-        $products=Product::all();
-        $porductList=[];
-        foreach($products as $product){
-            $data=[
-                'availale_unit'=>$product->unit,
-                'product_name'=>$product->name,
-                'total_received'=>RequisitionReceivedRequest::where('product_id',$product->id)->where('status','approved')->sum('received_qty'),
-                'total_issue'=>IssueProduct::where('product_id',$product->id)->sum('unit'),
-                'total_damage'=>DamageProduct::where('product_id',$product->id)->sum('unit'),
+    public function productStockList()
+    {
+        $products = Product::select('id', 'name', 'unit')->get();
+
+        // Calculate total received, issue, and damage
+        $receivedSums = RequisitionReceivedRequest::where('status', 'approved')
+            ->select('product_id', DB::raw('SUM(received_qty) as total_received'))
+            ->groupBy('product_id')
+            ->pluck('total_received', 'product_id');
+
+        $issueSums = IssueProduct::select('product_id', DB::raw('SUM(unit) as total_issue'))
+            ->groupBy('product_id')
+            ->pluck('total_issue', 'product_id');
+
+        $damageSums = DamageProduct::select('product_id', DB::raw('SUM(unit) as total_damage'))
+            ->groupBy('product_id')
+            ->pluck('total_damage', 'product_id');
+
+        // Merge data
+        $productList = [];
+
+        foreach ($products as $product) {
+            $productList[] = [
+                'available_unit' => $product->unit,
+                'product_name' => $product->name,
+                'total_received' => $receivedSums[$product->id] ?? 0,
+                'total_issue' => $issueSums[$product->id] ?? 0,
+                'total_damage' => $damageSums[$product->id] ?? 0,
             ];
-            array_push($porductList,$data);
         }
 
-        return $porductList;
+        return Inertia::render('Products/ProductStockListPage', [
+            'productList' => $productList
+        ]);
     }
 
 
     //list product
     public function listProduct(){
-        return $products=Product::all();
+        $products=Product::all();
         return Inertia::render('Product/ProductList',['products'=>$products]);
     }
 

@@ -14,6 +14,7 @@ Route::get('/', function () {
 
 //user login
 Route::post('/login',[AuthController::class,'login']);
+Route::get('/login-page',[AuthController::class,'loginPage']);
 
 //user logout
 Route::get('/logout',[AuthController::class,'logout']);
@@ -57,3 +58,4 @@ Route::get('/requisition-product-list',[RequisitionController::class,'requisitio
 
 
 });
+
