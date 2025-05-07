@@ -17,9 +17,11 @@ class TokenVerificationMiddleWare
     public function handle(Request $request, Closure $next): Response
     {
         $token=$request->cookie('token');
+
         $result=JWTToken::verifyToken($token);
         if($result=="Unauthorized"){
-            return redirect('/login');
+            // return redirect('/login');
+            return response('unauthorized ');
         }else{
             return $next($request);
         }

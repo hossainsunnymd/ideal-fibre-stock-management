@@ -20,15 +20,17 @@ class AuthController extends Controller
           $user = User::where('email', $request->email)->first();
 
           if (!$user || !Hash::check($request->password, $user->password)) {
-              return redirect()->back()->with(['status'=>false,'message'=>'Invalid email or password']);
+            //   return redirect()->back()->with(['status'=>false,'message'=>'Invalid email or password']);
+              return response('crediantials not match');
           }
 
           $token=JWTToken::createToken($user->email);
-          return redirect('/product-stock-list')->cookie('token', $token, 60*60*24);
+        //   return redirect('/product-stock-list')->cookie('token', $token, 60*60*24);
+          return response('login success')->cookie('token', $token, 60*60*24);
     }
 
     //user logout
     public function logout(){
-        return redirect('/login')->cookie('token', '', -1);
+        return response('logout suscessfully')->cookie('token', '', -1);
     }
 }

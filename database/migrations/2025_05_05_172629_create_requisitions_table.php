@@ -16,8 +16,8 @@ return new class extends Migration
             $table->string('created_by');
             $table->decimal('total_by_kg',15,2);
             $table->integer('total_by_pc');
-            $table->decimal('qty_by_feet',15,2);
-            $table->decimal('qty_by_coel',15,2);
+            $table->decimal('total_by_feet',15,2);
+            $table->decimal('total_by_coel',15,2);
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });

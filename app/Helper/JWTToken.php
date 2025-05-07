@@ -24,13 +24,13 @@ class JWTToken{
     }
 
     //verify token
-    public static function verifyToken($token):object|string{
+    public static function verifyToken($token){
         if($token==null){
-            return "Unauthorized";
+            return "Unauthorized"; ;
         }
        try{
         $key=env('JWT_KEY');
-        $decode=JWT::decode($_GET['token'],new Key($key,'HS256'));
+        $decode=JWT::decode($token,new Key($key,'HS256'));
         return $decode;
        }catch(Exception $e){
         return "Unauthorized";

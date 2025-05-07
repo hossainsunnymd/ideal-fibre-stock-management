@@ -16,11 +16,11 @@ return new class extends Migration
             $table->unsignedBigInteger('requisition_id');
             $table->unsignedBigInteger('product_id');
             $table->foreign('requisition_id')->references('id')->on('requisitions')
-            ->cascadeOnDelete()->cascadeOnUpdate();
+            ->restrictOnDelete()->cascadeOnUpdate();
             $table->foreign('product_id')->references('id')->on('products')
             ->restrictOnDelete()->cascadeOnUpdate();
-            $table->decimal('qty',15,2);
-            $table->string('qty_type');
+            $table->decimal('total_requisition',15,2);
+            $table->decimal('total_received',15,2);
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });

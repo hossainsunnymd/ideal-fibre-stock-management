@@ -10,7 +10,7 @@ class CategoryController extends Controller
 {
     //list category
     public function listCategory(){
-        $categories=Category::all();
+       return $categories=Category::all();
         return Inertia::render('Category/CategoryList',['categories'=>$categories]);
     }
 

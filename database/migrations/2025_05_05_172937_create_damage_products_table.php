@@ -16,8 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('product_id');
             $table->foreign('product_id')->references('id')->on('products')
             ->restrictOnDelete()->cascadeOnUpdate();
-            $table->integer('qty_by_pc');
-            $table->decimal('qty_by_kg',15,2);
+            $table->decimal('unit',15,2);
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });

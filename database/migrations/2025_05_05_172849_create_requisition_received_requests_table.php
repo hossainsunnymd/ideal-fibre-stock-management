@@ -14,12 +14,12 @@ return new class extends Migration
         Schema::create('requisition_received_requests', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('requisitionProduct_id');
+            $table->unsignedBigInteger('product_id');
             $table->foreign('requisitionProduct_id')->references('id')->on('requisition_products')
-            ->cascadeOnDelete()->cascadeOnUpdate();
-            $table->integer('qty_by_pc');
-            $table->decimal('qty_by_kg',15,2);
-            $table->decimal('qty_by_feet',15,2);
-            $table->decimal('qty_by_coel',15,2);
+            ->restrictOnDelete()->cascadeOnUpdate();
+            $table->foreign('product_id')->references('id')->on('products')
+            ->restrictOnDelete()->cascadeOnUpdate();
+            $table->decimal('received_qty',15,2);
             $table->string('status')->default('pending');
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();

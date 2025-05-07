@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\RequisitionController;
+use App\Http\Middleware\TokenVerificationMiddleWare;
 
 Route::get('/', function () {
     return view('welcome');
@@ -16,7 +18,8 @@ Route::post('/login',[AuthController::class,'login']);
 //user logout
 Route::get('/logout',[AuthController::class,'logout']);
 
-//products
+Route::middleware([TokenVerificationMiddleWare::class])->group(function () {
+    //products
 Route::get('/product-stock-list',[ProductController::class,'productStockList']);
 Route::get('/list-product',[ProductController::class,'listProduct']);
 Route::get('/product-save-page',[ProductController::class,'productSavePage']);
@@ -25,9 +28,32 @@ Route::post('/update-product',[ProductController::class,'updateProduct']);
 Route::get('/delete-product',[ProductController::class,'deleteProduct']);
 
 
+//issue product
+Route::post('/issue-product',[ProductController::class,'issueProduct']);
+
+//issue product list
+Route::get('/issue-product-list',[ProductController::class,'issueProductList']);
+
+//damage product list
+Route::get('/damage-product-list',[ProductController::class,'damageProductList']);
+
+
 //categories
 Route::get('/list-category',[CategoryController::class,'listCategory']);
 Route::get('/category-save-page',[CategoryController::class,'categorySavePage']);
 Route::post('/create-category',[CategoryController::class,'createCategory']);
 Route::post('/update-category',[CategoryController::class,'updateCategory']);
 Route::get('/delete-category',[CategoryController::class,'deleteCategory']);
+
+
+//requisitions
+Route::get('/list-requisition',[RequisitionController::class,'listRequisition']);
+Route::post('/create-requisition',[RequisitionController::class,'createRequisition']);
+Route::get('/delete-requisition',[RequisitionController::class,'deleteRequisition']);
+Route::get('/requisition-received-request-list',[RequisitionController::class,'requisitionReceivedRequestList']);
+Route::post('/requisition-received-request',[RequisitionController::class,'requisitionReceivedRequest']);
+Route::post('/requisition-approve-request',[RequisitionController::class,'requisitionApproveRequest']);
+Route::get('/requisition-product-list',[RequisitionController::class,'requisitionProductList']);
+
+
+});
