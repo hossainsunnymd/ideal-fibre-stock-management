@@ -3,8 +3,8 @@ import {usePage} from "@inertiajs/vue3";
 import {ref} from "vue";
 const page=usePage();
 const headers = [
-    { text: 'Available stock', value: 'available_unit' },
     { text: 'Name', value: 'product_name' },
+    { text: 'Available stock', value: 'available_unit' },
     { text: 'Total Received', value: 'total_received' },
     { text: 'Total Issue', value: 'total_issue' },
 ]

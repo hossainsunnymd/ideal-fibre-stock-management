@@ -16,9 +16,9 @@ class ProductController extends Controller
     //Product stock list
     public function productStockList()
     {
-        $products = Product::select('id', 'name', 'unit')->get();
+        $products = Product::get();
 
-        // Calculate total received, issue, and damage
+        // Calculate total received, issue
         $receivedSums = RequisitionReceivedRequest::where('status', 'approved')
             ->select('product_id', DB::raw('SUM(received_qty) as total_received'))
             ->groupBy('product_id')
@@ -27,10 +27,6 @@ class ProductController extends Controller
         $issueSums = IssueProduct::select('product_id', DB::raw('SUM(unit) as total_issue'))
             ->groupBy('product_id')
             ->pluck('total_issue', 'product_id');
-
-        $damageSums = DamageProduct::select('product_id', DB::raw('SUM(unit) as total_damage'))
-            ->groupBy('product_id')
-            ->pluck('total_damage', 'product_id');
 
         // Merge data
         $productList = [];
@@ -41,7 +37,7 @@ class ProductController extends Controller
                 'product_name' => $product->name,
                 'total_received' => $receivedSums[$product->id] ?? 0,
                 'total_issue' => $issueSums[$product->id] ?? 0,
-                'total_damage' => $damageSums[$product->id] ?? 0,
+
             ];
         }
 

@@ -81,8 +81,7 @@
       <!-- Main Content -->
       <main class="flex-1 p-6 md:ml-64 bg-gray-50 min-h-screen">
   <div class="bg-white rounded-xl shadow-md p-6">
-    <h2 class="text-3xl font-bold text-gray-800 mb-2">👋 Welcome to the Dashboard</h2>
-    <p class="text-gray-600 mb-6">Use the navigation sidebar to explore the features.</p>
+    <h2 class="text-3xl font-bold text-gray-800 mb-2">👋 Welcome to Stock Management System</h2>
 
     <!-- Cards Section -->
     <div class="grid grid-cols-1 md:grid-cols-1 gap-6">
