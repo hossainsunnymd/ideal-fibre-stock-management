@@ -20,8 +20,7 @@ class TokenVerificationMiddleWare
 
         $result=JWTToken::verifyToken($token);
         if($result=="Unauthorized"){
-            // return redirect('/login');
-            return response('unauthorized ');
+            return redirect('/login-page');
         }else{
             return $next($request);
         }

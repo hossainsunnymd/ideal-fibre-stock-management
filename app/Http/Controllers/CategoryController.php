@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
+use Inertia\Inertia;
 use App\Models\Category;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
 
 class CategoryController extends Controller
 {
@@ -25,23 +26,31 @@ class CategoryController extends Controller
     //create category
     public function createCategory(Request $request){
         $request->validate([
-            'name'=>'required'
+            'category_name'=>'required'
         ]);
+      try{
          Category::create([
-            'name'=>$request->name
+            'name'=>$request->category_name
         ]);
         return redirect()->back()->with(['status'=>true,'message'=>'Category created successfully']);
+      }catch(Exception $e){
+        return redirect()->back()->with(['status'=>false,'message'=>'somethintg went wrong']);
+      }
     }
 
     //update category
     public function updateCategory(Request $request){
         $request->validate([
-            'name'=>'required'
+            'category_name'=>'required'
         ]);
+       try{
         Category::where('id',$request->category_id)->update([
-            'name'=>$request->name
+            'name'=>$request->category_name
         ]);
         return redirect()->back()->with(['status'=>true,'message'=>'Category updated successfully']);
+       }catch(Exception $e){
+        return redirect()->back()->with(['status'=>false,'message'=>'somethintg went wrong']);
+       }
     }
 
     //delete category

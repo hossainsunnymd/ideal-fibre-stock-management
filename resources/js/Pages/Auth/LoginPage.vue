@@ -14,10 +14,10 @@ function submitForm() {
     form.post('/login',{
         preserveScroll: true,
         onSuccess: () => {
-            // if(page.props.flash.status=='fail'){
-                // toaster.error(page.props.flash.message);
-            // }
-        }
+            if(page.props.flash.status==false){
+                toaster.error(page.props.flash.message);
+            }
+        },
     })
 }
 
@@ -40,7 +40,7 @@ function submitForm() {
           type="email"
           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all"
         />
-        <p class="text-red-500">{{ form.errors.email }}</p>
+
       </div>
 
       <div>
@@ -49,7 +49,7 @@ function submitForm() {
           type="password"
           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all"
         />
-        <p class="text-red-500">{{ form.errors.password }}</p>
+
       </div>
 
       <div class="flex items-center justify-between">

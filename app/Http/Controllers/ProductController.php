@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Exception;
 use Inertia\Inertia;
 use App\Models\Product;
+use App\Models\Category;
 use App\Models\IssueProduct;
 use Illuminate\Http\Request;
 use App\Models\DamageProduct;
@@ -49,20 +50,25 @@ class ProductController extends Controller
 
     //list product
     public function listProduct(){
-        $products=Product::all();
-        return Inertia::render('Product/ProductList',['products'=>$products]);
+        $products=Product::with('category')->get();
+        return Inertia::render('Products/ProductListPage',['products'=>$products]);
     }
 
     //product save page
     public function productSavePage(Request $request){
         $productId=$request->product_id;
         $product=Product::where('id',$productId)->first();
-        return Inertia::render('Product/ProductSavePage',['product'=>$product]);
+        $category=Category::all();
+        return Inertia::render('Products/ProductSavePage',['product'=>$product,'category'=>$category]);
+    }
+    // product issue page
+    public function productIssuePage(Request $request){
+        return Inertia::render('Products/ProductDamageIssuePage');
     }
 
     //issue product
-
     public function issueProduct(Request $request){
+
       try{
         Product::where('id',$request->product_id)->decrement('unit',$request->issue);
         if($request->damage>0){
@@ -75,30 +81,34 @@ class ProductController extends Controller
                'unit'=>$request->issue
            ]);
         }
-        return " product issue successfully";
+        return redirect()->back()->with(['status'=>true,'message'=>'Product issued successfully']);
       }catch(Exception $e){
-        return "something went wrong". $e->getMessage();
+        return redirect()->back()->with(['status'=>false,'message'=>'somethintg went wrong']);
 
       }
     }
 
     //issue product list
     public function issueProductList(){
-        return $issueProducts=IssueProduct::with('product')->get();
+         $issueProducts=IssueProduct::with('product')->get();
+        return Inertia::render('Products/ProductIssuePage',['issueProducts'=>$issueProducts]);
     }
 
     //damage product list
     public function damageProductList(){
-        return $damageProducts=DamageProduct::with('product')->get();
+         $damageProducts=DamageProduct::with('product')->get();
+        return Inertia::render('Products/DamageProductPage',['damageProducts'=>$damageProducts]);
     }
 
     //create product
     public function createProduct(Request $request){
 
+
         $request->validate([
             'name'=>'required',
             'unit'=>'required',
             'unit_type'=>'required',
+            'category_id'=>'required'
         ]);
 
         try{
@@ -117,6 +127,7 @@ class ProductController extends Controller
 
     //update product
     public function updateProduct(Request $request){
+
         $request->validate([
             'name'=>'required',
             'unit'=>'required',
@@ -139,7 +150,11 @@ class ProductController extends Controller
 
     //delete product
     public function deleteProduct(Request $request){
-        Product::where('id',$request->product_id)->delete();
-        return redirect()->back()->with(['status'=>true,'message'=>'Product deleted successfully']);
+        try{
+            Product::where('id',$request->product_id)->delete();
+            return redirect()->back()->with(['status'=>true,'message'=>'Product deleted successfully']);
+        }catch(Exception $e){
+            return redirect()->back()->with(['status'=>false,'message'=>'somethintg went wrong']);
+        }
     }
 }

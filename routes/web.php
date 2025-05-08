@@ -30,6 +30,7 @@ Route::get('/delete-product',[ProductController::class,'deleteProduct']);
 
 
 //issue product
+Route::get('/product-issue-page',[ProductController::class,'productIssuePage']);
 Route::post('/issue-product',[ProductController::class,'issueProduct']);
 
 //issue product list
@@ -49,6 +50,7 @@ Route::get('/delete-category',[CategoryController::class,'deleteCategory']);
 
 //requisitions
 Route::get('/list-requisition',[RequisitionController::class,'listRequisition']);
+Route::get('/requisition-save-page',[RequisitionController::class,'requisitionSavePage']);
 Route::post('/create-requisition',[RequisitionController::class,'createRequisition']);
 Route::get('/delete-requisition',[RequisitionController::class,'deleteRequisition']);
 Route::get('/requisition-received-request-list',[RequisitionController::class,'requisitionReceivedRequestList']);

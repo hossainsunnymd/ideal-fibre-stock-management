@@ -9,13 +9,15 @@ use App\Models\RequisitionReceivedRequest;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Inertia\Inertia;
 
 class RequisitionController extends Controller
 {
     //list requisition
     public function listRequisition()
     {
-        return $requitions = Requisition::with('requistionProducts.product')->get();
+        $requisitions = Requisition::get();
+        return Inertia::render('Requisition/RequisitionListPage', ['requisitions' => $requisitions]);
     }
     //create requisition
     public function createRequisition(Request $request)
@@ -47,17 +49,28 @@ class RequisitionController extends Controller
         }
     }
 
+    //requisiton save page
+    public function requisitionSavePage()
+    {
+        $products = Product::with('category')->get();
+        return Inertia::render('Requisition/RequisitionSavePage',['products'=>$products]);
+    }
+
     //requisition received request
     public function requisitionReceivedRequest(Request $request)
     {
 
-        RequisitionReceivedRequest::create([
+       try{
+         $productId=RequisitionProduct::where('id', $request->requisition_product_id)->first()->product_id;
+         RequisitionReceivedRequest::create([
             'requisitionProduct_id' => $request->requisition_product_id,
             'received_qty' => $request->received_qty,
-            'product_id' => RequisitionProduct::where('id', $request->requisition_product_id)->first()->product_id
+            'product_id' => $productId,
         ]);
-
-        return 'request send successfully';
+        return redirect()->back()->with(['status' => true, 'message' => 'Request sent successfully']);
+       }catch(Exception $e){
+           return redirect()->back()->with(['status' => false, 'message' => 'somethintg went wrong']);
+       }
     }
 
     //requisition approved request
@@ -91,13 +104,16 @@ class RequisitionController extends Controller
     //requisition received request list
     public function requisitionReceivedRequestList()
     {
-        return RequisitionReceivedRequest::with('product')->get();
+        $recievedRequests = RequisitionReceivedRequest::with('product', 'requisitionProduct')->get();
+        return Inertia::render('Requisition/RequisitionReceivedRequestPage', ['recievedRequests' => $recievedRequests]);
     }
 
     //requisition product list
     public function requisitionProductList()
     {
-        return RequisitionProduct::with('product', 'requisition')->get();
+        $requisitionProducts = RequisitionProduct::with('product', 'requisition')->get();
+        return Inertia::render('Requisition/RequisitionProductPage', ['requisitionProducts' => $requisitionProducts]);
+
     }
 
 

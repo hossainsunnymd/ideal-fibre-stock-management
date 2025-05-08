@@ -16,4 +16,7 @@ class RequisitionReceivedRequest extends Model
     public function product(){
         return $this->belongsTo(product::class);
     }
+    public function requisitionProduct(){
+        return $this->belongsTo(RequisitionProduct::class,'requisitionProduct_id');
+    }
 }

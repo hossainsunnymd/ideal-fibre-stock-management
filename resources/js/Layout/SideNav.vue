@@ -41,33 +41,63 @@
               </Link>
             </li>
             <li>
-              <a
-                href="#"
+              <Link
+                :href="`/list-product`"
                 class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-700 transition-colors"
               >
                 <span class="material-icons">inventory</span>
                 <span>Products</span>
-              </a>
+              </Link>
             </li>
 
             <li>
-              <a
-                href="#"
+              <Link
+                :href="`/list-requisition`"
                 class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-700 transition-colors"
               >
                 <span class="material-icons">shopping_cart</span>
                 <span>Requisitions</span>
-              </a>
+              </Link>
             </li>
 
             <li>
-              <a
-                href="#"
+              <Link
+                :href="`/requisition-product-list`"
                 class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-700 transition-colors"
               >
                 <span class="material-icons">receipt</span>
                 <span>Requisition Products</span>
-              </a>
+              </Link>
+            </li>
+
+              <li>
+              <Link
+                :href="`/issue-product-list`"
+                class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-700 transition-colors"
+              >
+                <span class="material-icons">remove_shopping_cart</span>
+                <span>Issue</span>
+              </Link>
+            </li>
+
+             <li>
+              <Link
+                :href="`/requisition-received-request-list`"
+                class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-700 transition-colors"
+              >
+                <span class="material-icons text-green-600">check_circle</span>
+                <span>Received Requisition Request</span>
+              </Link>
+            </li>
+
+             <li>
+              <Link
+                :href="`/damage-product-list`"
+                class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-700 transition-colors"
+              >
+                 <span class="material-icons">dangerous</span>
+                <span class="text-sm font-medium">Damaged item reported</span>
+              </Link>
             </li>
           </ul>
         </nav>
@@ -80,7 +110,7 @@
 
       <!-- Main Content -->
       <main class="flex-1 p-6 md:ml-64 bg-gray-50 min-h-screen">
-  <div class="bg-white rounded-xl shadow-md p-6">
+  <div class="bg-white rounded-xl shadow-md p-6  min-h-screen">
     <h2 class="text-3xl font-bold text-gray-800 mb-2">👋 Welcome to Stock Management System</h2>
 
     <!-- Cards Section -->
