@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\RequisitionController;
@@ -20,6 +21,15 @@ Route::get('/login-page',[AuthController::class,'loginPage']);
 Route::get('/logout',[AuthController::class,'logout']);
 
 Route::middleware([TokenVerificationMiddleWare::class])->group(function () {
+
+    //users
+    Route::get('/list-user',[UserController::class,'listUser']);
+    Route::get('/user-save-page',[UserController::class,'userSavePage']);
+    Route::post('/create-user',[UserController::class,'createUser']);
+    Route::post('/update-user',[UserController::class,'updateUser']);
+    Route::get('/delete-user',[UserController::class,'deleteUser']);
+
+
     //products
 Route::get('/product-stock-list',[ProductController::class,'productStockList']);
 Route::get('/list-product',[ProductController::class,'listProduct']);
@@ -57,6 +67,13 @@ Route::get('/requisition-received-request-list',[RequisitionController::class,'r
 Route::post('/requisition-received-request',[RequisitionController::class,'requisitionReceivedRequest']);
 Route::get('/requisition-approve-request',[RequisitionController::class,'requisitionApproveRequest']);
 Route::get('/requisition-product-list',[RequisitionController::class,'requisitionProductList']);
+
+//purchases
+Route::get('/list-purchase',[ProductController::class,'listPurchase']);
+Route::get('/purchase-save-page',[ProductController::class,'purchaseSavePage']);
+Route::post('/create-purchase',[ProductController::class,'createPurchase']);
+Route::post('/update-purchase',[ProductController::class,'updatePurchase']);
+Route::get('/delete-purchase',[ProductController::class,'deletePurchase']);
 
 
 });

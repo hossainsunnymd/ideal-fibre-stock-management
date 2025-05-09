@@ -40,7 +40,6 @@ class RequisitionController extends Controller
                     'total_requisition' => $product['requisition_qty'],
                     'total_received' => 0
                 ]);
-                Product::where('id', $product['id'])->decrement('unit', $product['requisition_qty']);
             }
             DB::commit();
             return redirect()->back()->with(['status' => true, 'message' => 'Requisition created successfully']);

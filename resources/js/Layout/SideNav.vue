@@ -22,9 +22,18 @@
         </div>
         <nav class="p-4 flex-1 overflow-y-auto">
           <ul class="space-y-2">
+              <li>
+              <Link
+                :href="`/list-user`"
+                class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-700 transition-colors"
+              >
+                <span class="material-icons">groups</span>
+                <span>Users</span>
+              </Link>
+            </li>
             <li>
               <Link
-                :href="`product-stock-list`"
+                :href="`/product-stock-list`"
                 class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-700 transition-colors"
               >
                 <span class="material-icons">inventory</span>
@@ -77,6 +86,16 @@
               >
                 <span class="material-icons">remove_shopping_cart</span>
                 <span>Issue</span>
+              </Link>
+            </li>
+
+              <li>
+              <Link
+                :href="`/list-purchase`"
+                class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-700 transition-colors"
+              >
+               <span class="material-icons">shopping_bag</span>
+                <span>Purchases</span>
               </Link>
             </li>
 

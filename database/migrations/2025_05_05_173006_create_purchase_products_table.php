@@ -13,11 +13,9 @@ return new class extends Migration
     {
         Schema::create('purchase_products', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('product_id');
-            $table->foreign('product_id')->references('id')->on('products')
-            ->restrictOnDelete()->cascadeOnUpdate();
-            $table->integer('qty_by_pc');
-            $table->decimal('qty_by_kg',15,2);
+            $table->string('product_name');
+            $table->decimal('unit',15,2);
+            $table->string('unit_type')->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });

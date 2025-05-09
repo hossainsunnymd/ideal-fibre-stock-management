@@ -9,6 +9,7 @@ use App\Models\Category;
 use App\Models\IssueProduct;
 use Illuminate\Http\Request;
 use App\Models\DamageProduct;
+use App\Models\PurchaseProduct;
 use Illuminate\Support\Facades\DB;
 use App\Models\RequisitionReceivedRequest;
 
@@ -18,12 +19,14 @@ class ProductController extends Controller
     public function productStockList(Request $request)
     {
         $products = Product::get();
-        $fromDate = date('Y-m-d', strtotime($request->query('fromDate')));
-        $toDate = date('Y-m-d', strtotime($request->query('toDate')));
+        $fromDate =$request->query('fromDate');
+        $toDate = $request->query('toDate');
 
         // Calculate total received, issue
         $receivedSums = RequisitionReceivedRequest::when($fromDate && $toDate, function ($query) use ($fromDate, $toDate) {
-            $query->whereDate('created_at', '>=', $fromDate)->whereDate('created_at', '<=', $toDate);
+            $fd=date('Y-m-d', strtotime($fromDate));
+            $td=date('Y-m-d', strtotime($toDate));
+            $query->whereDate('created_at', '>=', $fd)->whereDate('created_at', '<=', $td);
         })
             ->where('status', 'approved')
             ->select('product_id', DB::raw('SUM(received_qty) as total_received'))
@@ -32,7 +35,9 @@ class ProductController extends Controller
 
 
         $issueSums = IssueProduct::when($fromDate && $toDate, function ($query) use ($fromDate, $toDate) {
-            $query->whereDate('created_at', '>=', $fromDate)->whereDate('created_at', '<=', $toDate);
+            $fd=date('Y-m-d', strtotime($fromDate));
+            $td=date('Y-m-d', strtotime($toDate));
+            $query->whereDate('created_at', '>=', $fd)->whereDate('created_at', '<=', $td);
         })
             ->select('product_id', DB::raw('SUM(unit) as total_issue'))
             ->groupBy('product_id')
@@ -41,15 +46,15 @@ class ProductController extends Controller
         // Merge data
         $productList = [];
 
-
-
         foreach ($products as $product) {
             $totalReceived = $receivedSums[$product->id] ?? 0;
             $totalIssue = $issueSums[$product->id] ?? 0;
-
-            if ($totalReceived == 0 && $totalIssue == 0) {
+            if($fromDate && $toDate){
+                if($totalReceived ==0 && $totalIssue ==0){
                 continue;
             }
+            }
+
 
             $productList[] = [
                 'available_unit' => $product->unit,
@@ -61,8 +66,6 @@ class ProductController extends Controller
 
         return Inertia::render('Products/ProductStockListPage', [
             'productList' => $productList,
-            'issue' => $issueSums,
-            'received' => $receivedSums
         ]);
     }
 
@@ -179,6 +182,74 @@ class ProductController extends Controller
     {
         try {
             Product::where('id', $request->product_id)->delete();
+            return redirect()->back()->with(['status' => true, 'message' => 'Product deleted successfully']);
+        } catch (Exception $e) {
+            return redirect()->back()->with(['status' => false, 'message' => 'somethintg went wrong']);
+        }
+    }
+
+
+    //list purchase
+    public function listPurchase()
+    {
+
+       $purchases = PurchaseProduct::get();
+        return Inertia::render('Purchase/PurchaseListPage', ['purchases' => $purchases]);
+    }
+
+    //purchase save page
+    public function purchaseSavePage(Request $request)
+    {
+        $purchase_id = $request->query('purchase_id');
+        $purchaseProduct = PurchaseProduct::where('id', $purchase_id)->first();
+        return Inertia::render('Purchase/PurchaseSavePage', ['purchaseProduct' => $purchaseProduct]);
+    }
+
+    //create purchase
+    public function createPurchase(Request $request){
+        $request->validate([
+            'product_name' => 'required',
+            'unit' => 'required',
+        ]);
+
+        $data=[
+            'product_name'=>$request->product_name,
+            'unit'=>$request->unit,
+            'unit_type'=>$request->unit_type
+        ];
+        try {
+            PurchaseProduct::create($data);
+            return redirect()->back()->with(['status' => true, 'message' => 'Purchase created successfully']);
+        } catch (Exception $e) {
+            return redirect()->back()->with(['status' => false, 'message' => 'somethintg went wrong']);
+        }
+
+    }
+
+    //update purchase
+    public function updatePurchase(Request $request){
+        $request->validate([
+            'product_name' => 'required',
+            'unit' => 'required',
+        ]);
+
+        $data=[
+            'product_name'=>$request->product_name,
+            'unit'=>$request->unit,
+            'unit_type'=>$request->unit_type
+        ];
+        try {
+            PurchaseProduct::where('id', $request->purchase_id)->update($data);
+            return redirect()->back()->with(['status' => true, 'message' => 'Purchase updated successfully']);
+        } catch (Exception $e) {
+            return redirect()->back()->with(['status' => false, 'message' => 'somethintg went wrong']);
+        }
+    }
+
+    //delete purchase
+    public function deletePurchase(Request $request){
+        try {
+            PurchaseProduct::where('id', $request->purchase_id)->delete();
             return redirect()->back()->with(['status' => true, 'message' => 'Product deleted successfully']);
         } catch (Exception $e) {
             return redirect()->back()->with(['status' => false, 'message' => 'somethintg went wrong']);

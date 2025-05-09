@@ -2,35 +2,43 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
 use Exception;
+use App\Models\User;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 
 class UserController extends Controller
 {
     //list user
     public function listUser(){
         $users=User::all();
-        return Inertia::render('User/UserList',['users'=>$users]);
+        return Inertia::render('Users/UserListPage',['users'=>$users]);
     }
 
     //user save page
     public function userSavePage(Request $request){
         $userId=$request->user_id;
         $user=User::where('id',$userId)->first();
-        return Inertia::render('User/UserSavePage',['user'=>$user]);
+        return Inertia::render('Users/UserSavePage',['user'=>$user]);
     }
 
     //create user
     public function createUser(Request $request){
-        $request->validate([
-            'name'=>'required',
-            'email'=>'required|email|unique:users',
-            'password'=>'required',
-            'role'=>'required'
+       $validator = Validator::make($request->all(), [
+        'name' => 'required',
+        'email' => 'required|email|unique:users,email',
+        'password' => 'required|min:6',
+        'role' => 'required',
+    ]);
+
+     if ($validator->fails()) {
+        return Inertia::render('Users/UserSavePage', [
+            'errors' => $validator->errors()
         ]);
+    }
 
        try{
         $data=[
@@ -41,10 +49,10 @@ class UserController extends Controller
             'phone'=>$request->phone
 
         ];
-        $user=User::create($data);
-        return redirect('')->back()->with(['status'=>true,'message'=>'User created successfully']);
+        User::create($data);
+        return redirect()->back()->with(['status'=>true,'message'=>'User created successfully']);
        }catch(Exception $e){
-        return redirect()->back()->with(['status'=>false,'message'=>'Something went wrong']);
+        return redirect()->back()->with(['status'=>false,'message'=>'Something went wrong'.$e->getMessage() ]);
        }
     }
 
@@ -71,6 +79,10 @@ class UserController extends Controller
 
     //delete user
     public function deleteUser(Request $request){
+        $userRole=User::where('id',$request->user_id)->first()->role;
+        if($userRole=='superadmin'){
+            return redirect()->back()->with(['status'=>false,'message'=>'You can not delete This User']);
+        }
         User::where('id',$request->user_id)->delete();
         return redirect()->back()->with(['status'=>true,'message'=>'User deleted successfully']);
     }

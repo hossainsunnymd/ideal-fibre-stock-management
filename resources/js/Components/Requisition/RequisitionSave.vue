@@ -165,7 +165,7 @@ const productList = ref([]);
     }else if(product.requisition_qty==0){
         toaster.error('Minimum Quantity is 1');
     }
-    else if(product.requisition_qty<=product.unit){
+    else if(product.requisition_qty>0){
        const confirmProduct = {
             id: product.id,
             unit: product.unit,
@@ -176,6 +176,7 @@ const productList = ref([]);
     productList.value.push(confirmProduct);
     modal.value=false;
      calculateTotal();
+
     }else{
         alert('Enter Valid Quantity');
     }
@@ -195,7 +196,7 @@ const total=reactive({
 
 function calculateTotal() {
     total.total_by_coel = productList.value
-        .filter(product => product.unit_type == 'coel')
+        .filter(product => product.unit_type == 'Coel')
         .reduce((sum, product) => sum + parseFloat(product.requisition_qty), 0);
 
     total.total_by_feet = productList.value
@@ -207,7 +208,7 @@ function calculateTotal() {
         .reduce((sum, product) => sum + parseFloat(product.requisition_qty), 0);
 
     total.total_by_pc = productList.value
-        .filter(product => product.unit_type == 'pc')
+        .filter(product => product.unit_type == 'Pc')
         .reduce((sum, product) => sum + parseFloat(product.requisition_qty), 0);
 }
 
