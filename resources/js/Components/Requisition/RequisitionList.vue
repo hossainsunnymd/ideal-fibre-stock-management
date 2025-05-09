@@ -2,7 +2,7 @@
 import { usePage,Link } from '@inertiajs/vue3';
 import { ref } from 'vue';
 const page=usePage();
-console.log(page.props.requisitions);
+
 const headers = [
     { text: 'ID', value: 'id' },
     { text: 'Created By', value: 'created_by' },
@@ -19,7 +19,7 @@ const searchItem=ref();
 
 <template>
 <input type="text" class="border border-gray-300 rounded-md px-4 py-2 w-[300px]" v-model="searchItem" placeholder="Search here" >
-<EasyDataTable :headers="headers" :items="items" alternating :rows-per-page="5" :search-field="searchField" :search-value="searchItem"><    /EasyDataTable>
+<EasyDataTable :headers="headers" :items="items" alternating :rows-per-page="5" :search-field="searchField" :search-value="searchItem">>
     <template #item-action="{ id }">
         <Link :href="`/requisition-save-page?requisition_id=${id}`" class="bg-blue-500 text-white font-bold py-2 px-4 rounded">Edit</Link>
         <button @click="deleteRequisition(id)" class="bg-red-500 text-white font-bold py-2 px-4 rounded ml-1">Delete</button>

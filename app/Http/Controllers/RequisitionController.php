@@ -25,7 +25,7 @@ class RequisitionController extends Controller
         DB::beginTransaction();
         try {
             $data = [
-                'created_by' => $request->created_by,
+                'created_by' =>'superadmin',
                 'total_by_kg' => $request->total_by_kg,
                 'total_by_pc' => $request->total_by_pc,
                 'total_by_feet' => $request->total_by_feet,
@@ -36,16 +36,17 @@ class RequisitionController extends Controller
             foreach ($products as $product) {
                 RequisitionProduct::create([
                     'requisition_id' => $requisition->id,
-                    'product_id' => $product['product_id'],
-                    'total_requisition' => $product['qty'],
+                    'product_id' => $product['id'],
+                    'total_requisition' => $product['requisition_qty'],
                     'total_received' => 0
                 ]);
+                Product::where('id', $product['id'])->decrement('unit', $product['requisition_qty']);
             }
             DB::commit();
-            return 'success';
+            return redirect()->back()->with(['status' => true, 'message' => 'Requisition created successfully']);
         } catch (Exception $e) {
             DB::rollBack();
-            return 'something went wrong ' . $e;
+           return redirect()->back()->with(['status' => false, 'message' => 'somethintg went wrong'.$e->getMessage()]);
         }
     }
 
@@ -77,11 +78,12 @@ class RequisitionController extends Controller
     public function requisitionApproveRequest(Request $request)
     {
 
-        $receivedRequest = RequisitionReceivedRequest::findOrFail($request->received_id);
+        try{
+                  $receivedRequest = RequisitionReceivedRequest::findOrFail($request->query('received_id'));
 
         // Update status
         $receivedRequest->update([
-            'status' => $request->status,
+            'status' => $request->query('status'),
         ]);
 
         if ($request->status === 'approved') {
@@ -96,7 +98,10 @@ class RequisitionController extends Controller
                 ->increment('unit', $qty);
         }
 
-        return 'Request approved successfully';
+        return redirect()->back()->with(['status' => true, 'message' => "Request {$request->query('status')} successfully"]);
+        }catch(Exception $e){
+            return redirect()->back()->with(['status' => false, 'message' => 'somethintg went wrong']);
+        }
     }
 
 

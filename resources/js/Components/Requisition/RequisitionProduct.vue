@@ -63,7 +63,6 @@ function confirmAction() {
 
   <div>
 
-
     <!-- Modal Overlay -->
     <div
       v-if="modal"

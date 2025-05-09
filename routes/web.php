@@ -55,7 +55,7 @@ Route::post('/create-requisition',[RequisitionController::class,'createRequisiti
 Route::get('/delete-requisition',[RequisitionController::class,'deleteRequisition']);
 Route::get('/requisition-received-request-list',[RequisitionController::class,'requisitionReceivedRequestList']);
 Route::post('/requisition-received-request',[RequisitionController::class,'requisitionReceivedRequest']);
-Route::post('/requisition-approve-request',[RequisitionController::class,'requisitionApproveRequest']);
+Route::get('/requisition-approve-request',[RequisitionController::class,'requisitionApproveRequest']);
 Route::get('/requisition-product-list',[RequisitionController::class,'requisitionProductList']);
 
 
