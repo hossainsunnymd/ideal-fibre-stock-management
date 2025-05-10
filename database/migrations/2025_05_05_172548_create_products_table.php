@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreign('category_id')->references('id')->on('categories')
             ->restrictOnDelete()->cascadeOnUpdate();
             $table->decimal('unit',15,2);
+            $table->decimal('minimum_stock',15,2);
             $table->string('unit_type');
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();

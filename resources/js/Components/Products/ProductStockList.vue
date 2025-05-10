@@ -18,8 +18,8 @@ const category_id=new URLSearchParams(window.location.search).get('category_id')
 const category_name=page.props.category_name;
 
 const form=useForm({
-    fromDate: fromDate?fromDate:'',
-    toDate: toDate?toDate:'',
+    fromDate: fromDate,
+    toDate: toDate,
     category_id:category_id
 });
 
@@ -31,6 +31,7 @@ function submitForm(){
 </script>
 
 <template>
+     <p class="text-2xl font-bold">All Product Stock List</p>
  <div class="flex justify-between">
     <div class="flex gap-5">
         <input type="text" class="border border-gray-300 rounded-md px-4 py-2 w-[300px]" v-model="searchItem" placeholder="Search here" >

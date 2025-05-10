@@ -39,7 +39,8 @@ class RequisitionController extends Controller
                     'requisition_id' => $requisition->id,
                     'product_id' => $product['id'],
                     'total_requisition' => $product['requisition_qty'],
-                    'total_received' => 0
+                    'total_received' => 0,
+
                 ]);
             }
             DB::commit();
@@ -69,6 +70,9 @@ class RequisitionController extends Controller
             'received_qty' => $request->received_qty,
             'product_id' => $productId,
             'category_id' => $categoryId,
+        ]);
+        RequisitionProduct::where('id', $request->requisition_product_id)->update([
+            'status' => 'received',
         ]);
         return redirect()->back()->with(['status' => true, 'message' => 'Request sent successfully']);
        }catch(Exception $e){
@@ -118,7 +122,7 @@ class RequisitionController extends Controller
     //requisition product list
     public function requisitionProductList()
     {
-        $requisitionProducts = RequisitionProduct::with('product', 'requisition')->get();
+        $requisitionProducts = RequisitionProduct::where('status', 'pending')->with('product', 'requisition')->get();
         return Inertia::render('Requisition/RequisitionProductPage', ['requisitionProducts' => $requisitionProducts]);
 
     }

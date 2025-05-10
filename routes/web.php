@@ -50,6 +50,9 @@ Route::get('/issue-product-list',[ProductController::class,'issueProductList']);
 //damage product list
 Route::get('/damage-product-list',[ProductController::class,'damageProductList']);
 
+//minimum product list
+Route::get('/minimum-product-list',[ProductController::class,'minimumProductList']);
+
 
 //categories
 Route::get('/list-category',[CategoryController::class,'listCategory']);

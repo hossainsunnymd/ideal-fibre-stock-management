@@ -99,6 +99,16 @@
               </Link>
             </li>
 
+                <li>
+              <Link
+                :href="`/minimum-product-list`"
+                class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-700 transition-colors"
+              >
+               <i class="material-icons">warning</i>
+                <span>Minimum Stock</span>
+              </Link>
+            </li>
+
              <li>
               <Link
                 :href="`/requisition-received-request-list`"

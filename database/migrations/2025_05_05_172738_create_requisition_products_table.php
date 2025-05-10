@@ -21,6 +21,7 @@ return new class extends Migration
             ->restrictOnDelete()->cascadeOnUpdate();
             $table->decimal('total_requisition',15,2);
             $table->decimal('total_received',15,2);
+            $table->string('status')->default('pending');
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });

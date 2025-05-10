@@ -10,7 +10,8 @@ class RequisitionProduct extends Model
         'requisition_id',
         'product_id',
         'total_requisition',
-        'total_received'
+        'total_received',
+        'status'
     ];
 
     public function product(){

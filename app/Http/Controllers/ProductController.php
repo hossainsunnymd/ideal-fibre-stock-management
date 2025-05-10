@@ -152,18 +152,46 @@ class ProductController extends Controller
     }
 }
 
-
-    //issue product list
-    public function issueProductList()
+    //minimum stock list
+    public function minimumProductList(Request $request)
     {
-        $issueProducts = IssueProduct::with('product')->get();
-        return Inertia::render('Products/ProductIssuePage', ['issueProducts' => $issueProducts]);
+
+        $products = Product::whereColumn('unit', '<=','minimum_stock' )->with('category')->get();
+        return Inertia::render('Products/MinimumStockListPage', ['products' => $products]);
     }
 
+
+    //issue product list
+  public function issueProductList(Request $request)
+{
+      $fromDate = $request->query('fromDate');
+        $toDate = $request->query('toDate');
+
+    $issueProducts = IssueProduct::when($fromDate && $toDate, function ($query) use ($fromDate, $toDate) {
+        $fd = date('Y-m-d', strtotime($fromDate));
+        $td = date('Y-m-d', strtotime($toDate));
+
+        $query->whereDate('created_at', '>=', $fd)
+              ->whereDate('created_at', '<=', $td);
+    })->with('product')->get();
+
+    return Inertia::render('Products/ProductIssuePage', ['issueProducts' => $issueProducts,'fromDate'=>$fromDate,'toDate'=>$toDate]);
+}
+
+
     //damage product list
-    public function damageProductList()
+    public function damageProductList(Request $request)
     {
-        $damageProducts = DamageProduct::with('product')->get();
+        $fromDate = $request->query('fromDate');
+        $toDate = $request->query('toDate');
+
+        $damageProducts = DamageProduct::when($fromDate && $toDate, function ($query) use ($fromDate, $toDate) {
+            $fd = date('Y-m-d', strtotime($fromDate));
+            $td = date('Y-m-d', strtotime($toDate));
+
+            $query->whereDate('created_at', '>=', $fd)
+                  ->whereDate('created_at', '<=', $td);
+        })->with('product')->get();
         return Inertia::render('Products/DamageProductPage', ['damageProducts' => $damageProducts]);
     }
 
@@ -176,7 +204,8 @@ class ProductController extends Controller
             'name' => 'required',
             'unit' => 'required',
             'unit_type' => 'required',
-            'category_id' => 'required'
+            'category_id' => 'required',
+            'mimimum_stock'=>'required'
         ]);
 
         try {
@@ -184,7 +213,8 @@ class ProductController extends Controller
                 'name' => $request->name,
                 'category_id' => $request->category_id,
                 'unit' => $request->unit,
-                'unit_type' => $request->unit_type
+                'unit_type' => $request->unit_type,
+                'minimum_stock'=>$request->mimimum_stock
             ];
             Product::create($data);
             return redirect()->back()->with(['status' => true, 'message' => 'Product created successfully']);

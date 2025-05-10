@@ -44,6 +44,7 @@ if(page.props.flash.status==true){
 </script>
 
 <template>
+     <p class="text-2xl font-bold">Requisition List</p>
     <RequisitionDetails v-model:modal="modal" :products="products"/>
 <input type="text" class="border border-gray-300 rounded-md px-4 py-2 w-[300px]" v-model="searchItem" placeholder="Search here" >
 <EasyDataTable :headers="headers" :items="items" alternating :rows-per-page="5" :search-field="searchField" :search-value="searchItem">>

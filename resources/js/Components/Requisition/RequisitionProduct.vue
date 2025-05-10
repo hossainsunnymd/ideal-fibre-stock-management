@@ -40,7 +40,7 @@ function confirmAction() {
             }else if(page.props.flash.status==true){
                 toaster.success(page.props.flash.message);
                  showModal.value = false
-                router.visit('/requisition-received-request-list');
+                 router.visit('/requisition-product-list');
             }
         }
     });
@@ -52,6 +52,7 @@ function confirmAction() {
 </script>
 
 <template>
+     <p class="text-2xl font-bold">Requisition Product List</p>
     <input type="text" class="border border-gray-300 rounded-md px-4 py-2 w-[300px]" v-model="searchItem" placeholder="Search here">
 <EasyDataTable :headers="headers" :items="items" alternating :rows-per-page="5" :serch-field="searchField" :search-value="searchItem">
     <template #item-action="{ id }">

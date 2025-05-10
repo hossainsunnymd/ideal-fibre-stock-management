@@ -34,6 +34,8 @@ if(page.props.flash.status==true){
 </script>
 
 <template>
+     <p class="text-2xl font-bold">Requisition Received List</p>
+
 <EasyDataTable :headers="headers" :items="items" alternating :rows-per-page="5">
     <template #item-action="{ id }">
         <Link :href="`/edit-requisition-request-page?id=${id}`"  class="bg-blue-500 text-white font-bold py-2 px-4 rounded cursor-pointer">Edit</Link>
