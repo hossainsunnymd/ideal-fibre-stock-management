@@ -14,7 +14,7 @@ class Requisition extends Model
         'total_by_coel',
     ];
 
-    public function requistionProducts(){
+    public function requisitionProducts(){
         return $this->hasMany(RequisitionProduct::class);
     }
 }

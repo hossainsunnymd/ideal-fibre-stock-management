@@ -16,7 +16,8 @@ class RequisitionController extends Controller
     //list requisition
     public function listRequisition()
     {
-        $requisitions = Requisition::get();
+        $requisitions = Requisition::with('requisitionProducts.product')->get();
+
         return Inertia::render('Requisition/RequisitionListPage', ['requisitions' => $requisitions]);
     }
     //create requisition
@@ -62,10 +63,12 @@ class RequisitionController extends Controller
 
        try{
          $productId=RequisitionProduct::where('id', $request->requisition_product_id)->first()->product_id;
+         $categoryId=Product::where('id', $productId)->first()->category_id;
          RequisitionReceivedRequest::create([
             'requisitionProduct_id' => $request->requisition_product_id,
             'received_qty' => $request->received_qty,
             'product_id' => $productId,
+            'category_id' => $categoryId,
         ]);
         return redirect()->back()->with(['status' => true, 'message' => 'Request sent successfully']);
        }catch(Exception $e){
@@ -108,7 +111,7 @@ class RequisitionController extends Controller
     //requisition received request list
     public function requisitionReceivedRequestList()
     {
-        $recievedRequests = RequisitionReceivedRequest::with('product', 'requisitionProduct')->get();
+        $recievedRequests = RequisitionReceivedRequest::where('status', 'pending')->with('product', 'requisitionProduct')->get();
         return Inertia::render('Requisition/RequisitionReceivedRequestPage', ['recievedRequests' => $recievedRequests]);
     }
 
@@ -120,15 +123,34 @@ class RequisitionController extends Controller
 
     }
 
+    //edit requisition request page
+    public function editRequisitionRequestPage(Request $request)
+    {
+        $requisition = RequisitionReceivedRequest::where('id', $request->id)->with('product')->first();
+        return Inertia::render('Requisition/EditRequisitionRequestPage', ['requisition' => $requisition]);
+    }
+
+    // update requisition request
+    public function updateRequisitionRequest(Request $request){
+        try{
+            RequisitionReceivedRequest::where('id', $request->id)->update([
+                'received_qty' => $request->received_qty,
+            ]);
+            return redirect()->back()->with(['status' => true, 'message' => 'Request updated successfully']);
+        }catch(Exception $e){
+            return redirect()->back()->with(['status' => false, 'message' => 'somethintg went wrong']);
+        }
+    }
 
     //delete requistion
     public function deleteRequisition(Request $request)
     {
+
         try {
             RequisitionProduct::where('requisition_id', $request->requisition_id)->delete();
             Requisition::where('id', $request->requisition_id)->delete();
 
-            return redirect()->back()->with(['status' => true, 'message' => 'Product deleted successfully']);
+            return redirect()->back()->with(['status' => true, 'message' => 'Requisition deleted successfully']);
         } catch (Exception $e) {
 
             return redirect()->back()->with(['status' => false, 'message' => 'somethintg went wrong']);

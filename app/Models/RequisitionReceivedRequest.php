@@ -10,6 +10,7 @@ class RequisitionReceivedRequest extends Model
         'requisitionProduct_id',
         'received_qty',
         'product_id',
+        'category_id',
         'status'
     ];
 

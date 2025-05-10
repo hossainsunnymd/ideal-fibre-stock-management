@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\RequisitionController;
 use App\Http\Middleware\TokenVerificationMiddleWare;
 
@@ -67,13 +68,15 @@ Route::get('/requisition-received-request-list',[RequisitionController::class,'r
 Route::post('/requisition-received-request',[RequisitionController::class,'requisitionReceivedRequest']);
 Route::get('/requisition-approve-request',[RequisitionController::class,'requisitionApproveRequest']);
 Route::get('/requisition-product-list',[RequisitionController::class,'requisitionProductList']);
+Route::get('/edit-requisition-request-page',[RequisitionController::class,'editRequisitionRequestPage']);
+Route::post('/update-requisition-request',[RequisitionController::class,'updateRequisitionRequest']);
 
 //purchases
-Route::get('/list-purchase',[ProductController::class,'listPurchase']);
-Route::get('/purchase-save-page',[ProductController::class,'purchaseSavePage']);
-Route::post('/create-purchase',[ProductController::class,'createPurchase']);
-Route::post('/update-purchase',[ProductController::class,'updatePurchase']);
-Route::get('/delete-purchase',[ProductController::class,'deletePurchase']);
+Route::get('/list-purchase',[PurchaseController::class,'listPurchase']);
+Route::get('/purchase-save-page',[PurchaseController::class,'purchaseSavePage']);
+Route::post('/create-purchase',[PurchaseController::class,'createPurchase']);
+Route::post('/update-purchase',[PurchaseController::class,'updatePurchase']);
+Route::get('/delete-purchase',[PurchaseController::class,'deletePurchase']);
 
 
 });

@@ -18,15 +18,27 @@ class ProductController extends Controller
     //Product stock list
     public function productStockList(Request $request)
     {
-        $products = Product::get();
+        $categories = Category::all();
         $fromDate =$request->query('fromDate');
         $toDate = $request->query('toDate');
+        $categoryId = $request->query('category_id');
+        $category_name='';
+        if($categoryId){
+            $category_name=Category::where('id',$categoryId)->first()->name;
+        }
+
+        $products = Product::when($categoryId, function($query) use ($categoryId) {
+        $query->where('category_id', $categoryId);
+         })->get();
+
 
         // Calculate total received, issue
         $receivedSums = RequisitionReceivedRequest::when($fromDate && $toDate, function ($query) use ($fromDate, $toDate) {
             $fd=date('Y-m-d', strtotime($fromDate));
             $td=date('Y-m-d', strtotime($toDate));
             $query->whereDate('created_at', '>=', $fd)->whereDate('created_at', '<=', $td);
+        })->when($categoryId, function ($query) use ($categoryId) {
+            $query->where('category_id', $categoryId);
         })
             ->where('status', 'approved')
             ->select('product_id', DB::raw('SUM(received_qty) as total_received'))
@@ -38,6 +50,8 @@ class ProductController extends Controller
             $fd=date('Y-m-d', strtotime($fromDate));
             $td=date('Y-m-d', strtotime($toDate));
             $query->whereDate('created_at', '>=', $fd)->whereDate('created_at', '<=', $td);
+        })->when($categoryId, function ($query) use ($categoryId) {
+            $query->where('category_id', $categoryId);
         })
             ->select('product_id', DB::raw('SUM(unit) as total_issue'))
             ->groupBy('product_id')
@@ -54,8 +68,6 @@ class ProductController extends Controller
                 continue;
             }
             }
-
-
             $productList[] = [
                 'available_unit' => $product->unit,
                 'product_name' => $product->name,
@@ -66,6 +78,8 @@ class ProductController extends Controller
 
         return Inertia::render('Products/ProductStockListPage', [
             'productList' => $productList,
+            'categories'=>$categories,
+            'category_name'=>$category_name,
         ]);
     }
 
@@ -92,26 +106,52 @@ class ProductController extends Controller
     }
 
     //issue product
-    public function issueProduct(Request $request)
-    {
+  public function issueProduct(Request $request)
+{
+    try {
+        $product = Product::findOrFail($request->product_id);
+        $category_id = $product->category_id;
+        $exist_qty = $product->unit;
+        $damage_qty = $request->damage ?? 0;
+        $issue_qty = $request->issue ?? 0;
 
-        try {
-            Product::where('id', $request->product_id)->decrement('unit', $request->issue);
-            if ($request->damage > 0) {
-                DamageProduct::create([
-                    'product_id' => $request->product_id,
-                    'unit' => $request->damage
-                ]);
-            }
-            IssueProduct::create([
-                'product_id' => $request->product_id,
-                'unit' => $request->issue
+
+        if ($damage_qty > 0) {
+            DamageProduct::create([
+                'product_id' => $product->id,
+                'unit' => $damage_qty,
+                'category_id' => $category_id,
             ]);
-            return redirect()->back()->with(['status' => true, 'message' => 'Product issued successfully']);
-        } catch (Exception $e) {
-            return redirect()->back()->with(['status' => false, 'message' => 'somethintg went wrong']);
         }
+
+        // If only damage was done and no issue
+        if ($issue_qty == 0 && $damage_qty > 0) {
+            return redirect()->back()->with(['status' => true, 'message' => 'Product damaged successfully']);
+        }
+
+
+        if ($issue_qty > 0) {
+            if ($issue_qty <= $exist_qty) {
+                IssueProduct::create([
+                    'product_id' => $product->id,
+                    'unit' => $issue_qty,
+                    'category_id' => $category_id,
+                ]);
+
+                $product->decrement('unit', $issue_qty);
+
+                return redirect()->back()->with(['status' => true, 'message' => 'Product issued successfully']);
+            } else {
+                return redirect()->back()->with(['status' => false, 'message' => 'Issue quantity is greater than available quantity']);
+            }
+        }
+        return redirect()->back()->with(['status' => false, 'message' => 'No issue or damage quantity provided']);
+
+    } catch (Exception $e) {
+        return redirect()->back()->with(['status' => false, 'message' => 'Something went wrong']);
     }
+}
+
 
     //issue product list
     public function issueProductList()
@@ -188,71 +228,4 @@ class ProductController extends Controller
         }
     }
 
-
-    //list purchase
-    public function listPurchase()
-    {
-
-       $purchases = PurchaseProduct::get();
-        return Inertia::render('Purchase/PurchaseListPage', ['purchases' => $purchases]);
-    }
-
-    //purchase save page
-    public function purchaseSavePage(Request $request)
-    {
-        $purchase_id = $request->query('purchase_id');
-        $purchaseProduct = PurchaseProduct::where('id', $purchase_id)->first();
-        return Inertia::render('Purchase/PurchaseSavePage', ['purchaseProduct' => $purchaseProduct]);
-    }
-
-    //create purchase
-    public function createPurchase(Request $request){
-        $request->validate([
-            'product_name' => 'required',
-            'unit' => 'required',
-        ]);
-
-        $data=[
-            'product_name'=>$request->product_name,
-            'unit'=>$request->unit,
-            'unit_type'=>$request->unit_type
-        ];
-        try {
-            PurchaseProduct::create($data);
-            return redirect()->back()->with(['status' => true, 'message' => 'Purchase created successfully']);
-        } catch (Exception $e) {
-            return redirect()->back()->with(['status' => false, 'message' => 'somethintg went wrong']);
-        }
-
-    }
-
-    //update purchase
-    public function updatePurchase(Request $request){
-        $request->validate([
-            'product_name' => 'required',
-            'unit' => 'required',
-        ]);
-
-        $data=[
-            'product_name'=>$request->product_name,
-            'unit'=>$request->unit,
-            'unit_type'=>$request->unit_type
-        ];
-        try {
-            PurchaseProduct::where('id', $request->purchase_id)->update($data);
-            return redirect()->back()->with(['status' => true, 'message' => 'Purchase updated successfully']);
-        } catch (Exception $e) {
-            return redirect()->back()->with(['status' => false, 'message' => 'somethintg went wrong']);
-        }
-    }
-
-    //delete purchase
-    public function deletePurchase(Request $request){
-        try {
-            PurchaseProduct::where('id', $request->purchase_id)->delete();
-            return redirect()->back()->with(['status' => true, 'message' => 'Product deleted successfully']);
-        } catch (Exception $e) {
-            return redirect()->back()->with(['status' => false, 'message' => 'somethintg went wrong']);
-        }
-    }
 }

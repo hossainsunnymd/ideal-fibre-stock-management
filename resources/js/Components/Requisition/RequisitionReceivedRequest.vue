@@ -36,8 +36,8 @@ if(page.props.flash.status==true){
 <template>
 <EasyDataTable :headers="headers" :items="items" alternating :rows-per-page="5">
     <template #item-action="{ id }">
-        <button  class="bg-blue-500 text-white font-bold py-2 px-4 rounded">Edit</button>
-        <button @click="approvedRequest(id)" class="bg-green-500 text-white font-bold py-2 px-4 rounded">Approved</button>
+        <Link :href="`/edit-requisition-request-page?id=${id}`"  class="bg-blue-500 text-white font-bold py-2 px-4 rounded cursor-pointer">Edit</Link>
+        <button @click="approvedRequest(id)" class="bg-green-500 text-white font-bold py-2 px-4 rounded mx-1">Approved</button>
         <button @click="cancelRequest(id)" class="bg-red-500 text-white font-bold py-2 px-4 rounded">Cancel</button>
     </template>
 </EasyDataTable>
