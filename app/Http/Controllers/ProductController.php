@@ -11,7 +11,9 @@ use Illuminate\Http\Request;
 use App\Models\DamageProduct;
 use App\Models\PurchaseProduct;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 use App\Models\RequisitionReceivedRequest;
+
 
 class ProductController extends Controller
 {
@@ -199,13 +201,16 @@ class ProductController extends Controller
     {
 
 
-        $request->validate([
+        $validator = Validator::make($request->all(),[
             'name' => 'required',
-            'unit' => 'required',
+            'unit' => 'required|numeric|min:1',
             'unit_type' => 'required',
             'category_id' => 'required',
-            'minimum_stock' => 'required'
+            'minimum_stock' => 'required|numeric|min:1'
         ]);
+        if($validator->fails()){
+           return redirect()->back()->with(['errors' => $validator->errors()]);
+        }
 
         try {
             $data = [
@@ -226,18 +231,25 @@ class ProductController extends Controller
     public function updateProduct(Request $request)
     {
 
-        $request->validate([
+        $validator = Validator::make($request->all(),[
             'name' => 'required',
-            'unit' => 'required',
+            'unit' => 'required|numeric|min:1',
             'unit_type' => 'required',
+            'category_id' => 'required',
+            'minimum_stock' => 'required|numeric|min:1'
         ]);
+        if($validator->fails()){
+
+           return redirect()->back()->with(['errors' => $validator->errors()]);
+        }
 
         try {
             $data = [
                 'name' => $request->name,
                 'category_id' => $request->category_id,
                 'unit' => $request->unit,
-                'unit_type' => $request->unit_type
+                'unit_type' => $request->unit_type,
+                'minimum_stock' => $request->minimum_stock
             ];
             Product::where('id', $request->product_id)->update($data);
             return redirect()->back()->with(['status' => true, 'message' => 'Product updated successfully']);

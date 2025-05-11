@@ -21,7 +21,7 @@ const form = useForm({
 if (purchase_id != 0 && purchaseProduct != null) {
   form.product_name = purchaseProduct.product_name;
   form.unit = purchaseProduct.unit;
-  form.unit_type = purchaseProduct.unit_type;
+  form.product_id=id
   URL = "/update-purchase";
 }
 
@@ -39,8 +39,9 @@ function submitForm() {
     },
   });
 }
-function selectProduct(name){
+function selectProduct(name,id){
     form.product_name=name
+    form.product_id=id
 }
 
 const headers = [
@@ -71,6 +72,7 @@ const searchItem=ref();
           class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
           readonly
         />
+        <p v-if="form.errors.product_name" class="text-red-500">{{form.product_name[0]}}</p>
       </div>
 
 
@@ -82,20 +84,7 @@ const searchItem=ref();
           type="number"
           class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
-      </div>
-
-      <!-- Unit type -->
-      <div>
-        <label for="unit_type" class="block text-sm font-medium text-gray-700 mb-1">Unit Type</label>
-        <select
-          v-model="form.unit_type"
-          class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
-        >
-          <option value="kg">Kg</option>
-          <option value="feet">Feet</option>
-          <option value="Coel">Coel</option>
-          <option value="Pc">pc</option>
-        </select>
+        <p v-if="form.errors.unit" class="text-red-500">{{ form.errors.unit[0] }}</p>
       </div>
 
       <!-- Submit Button -->
@@ -115,9 +104,9 @@ const searchItem=ref();
        <input type="text" class="border border-gray-300 rounded-md px-4 py-2 w-[300px] mb-2" v-model="searchItem" placeholder="Search here">
       <EasyDataTable :headers="headers" :items="items" alternating :rows-per-page="5" :search-field="searchField" :search-value="searchItem">
 
-    <template #item-action="{ name }">
+    <template #item-action="{ name,id }">
 
-        <button @click="selectProduct(name)" class="bg-green-500 text-white font-bold py-2 px-4 rounded ml-1">Select</button>
+        <button @click="selectProduct(name,id)" class="bg-green-500 text-white font-bold py-2 px-4 rounded ml-1">Select</button>
 
     </template>
 

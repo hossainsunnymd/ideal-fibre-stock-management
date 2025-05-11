@@ -35,8 +35,10 @@ class AuthController extends Controller
     }
 
     //user logout
-    public function logout(){
-        return redirect('/login-page')->cookie('token', '', -1);
+    public function logout(Request $request){
+        $request->session()->flush();
+
+        return redirect('/')->cookie('token', '', -1);
     }
 
 }

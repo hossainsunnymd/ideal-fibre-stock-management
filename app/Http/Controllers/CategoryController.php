@@ -6,6 +6,7 @@ use Exception;
 use Inertia\Inertia;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class CategoryController extends Controller
 {
@@ -25,9 +26,16 @@ class CategoryController extends Controller
 
     //create category
     public function createCategory(Request $request){
-        $request->validate([
-            'category_name'=>'required'
+
+        $validator = Validator::make($request->all(), [
+            'category_name' => 'required',
         ]);
+
+        if ($validator->fails()) {
+
+            return redirect()->back()->with(['errors' => $validator->errors()]);
+        }
+
       try{
          Category::create([
             'name'=>$request->category_name
@@ -40,9 +48,15 @@ class CategoryController extends Controller
 
     //update category
     public function updateCategory(Request $request){
-        $request->validate([
-            'category_name'=>'required'
+
+          $validator = Validator::make($request->all(), [
+            'category_name' => 'required',
         ]);
+
+        if ($validator->fails()) {
+
+            return redirect()->back()->with(['errors' => $validator->errors()]);
+        }
        try{
         Category::where('id',$request->category_id)->update([
             'name'=>$request->category_name

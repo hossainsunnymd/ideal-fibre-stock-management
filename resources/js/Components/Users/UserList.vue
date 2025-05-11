@@ -33,14 +33,22 @@ if(page.props.flash.status==false){
 
 <template>
      <p class="text-2xl font-bold">User List</p>
-    <div class="flex justify-between">
-        <div>
-            <input type="text" class="border border-gray-300 rounded-md px-4 py-2 w-[300px]" v-model="searchItem" placeholder="Search here" >
-        </div>
-        <div>
-            <Link :href="`/user-save-page?user_id=${0}`" class="bg-green-500 text-white  py-2 px-4 rounded">Add User</Link>
-        </div>
+    <div class="flex flex-col md:flex-row md:justify-between gap-4">
+    <div>
+        <input type="text"
+               class="border border-gray-300 rounded-md px-4 py-2 w-full md:w-[300px]"
+               v-model="searchItem"
+               placeholder="Search here">
     </div>
+    <div>
+        <Link
+            :href="`/user-save-page?user_id=${0}`"
+            class="bg-green-500 text-white py-2 px-4 rounded block text-center md:inline-block">
+            Add User
+        </Link>
+    </div>
+</div>
+
     <EasyDataTable :headers="headers" :items="items" alternating :rows-per-page="5" :search-field="searchField" :search-value="searchItem">
         <template #item-action="{ id }">
             <Link :href="`/user-save-page?user_id=${id}`" class="bg-blue-500 text-white font-bold py-2 px-4 rounded">Edit</Link>

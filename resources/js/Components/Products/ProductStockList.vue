@@ -33,32 +33,63 @@ function submitForm(){
 
 <template>
      <p class="text-2xl font-bold">All Product Stock List</p>
- <div class="flex justify-between">
-    <div class="flex gap-5">
-        <input type="text" class="border border-gray-300 rounded-md px-4 py-2 w-[300px]" v-model="searchItem" placeholder="Search here" >
-        <select v-model="form.category_id" class="border border-gray-300 rounded-md px-4 py-2 w-[300px]" >
+<div class="flex flex-col gap-4 md:flex-row md:justify-between">
+    <!-- Left Side (Search Inputs) -->
+    <div class="flex flex-col gap-4 md:flex-row md:items-center md:gap-5 w-full">
+        <input
+            type="text"
+            class="border border-gray-300 rounded-md px-4 py-2 w-full md:w-[250px]"
+            v-model="searchItem"
+            placeholder="Search here"
+        >
+
+        <select
+            v-model="form.category_id"
+            class="border border-gray-300 rounded-md px-4 py-2 w-full md:w-[250px]"
+        >
             <option>Select Category</option>
-            <option v-for="category in page.props.categories" :value="category.id" >{{category.name}}</option>
+            <option v-for="category in page.props.categories" :value="category.id">{{ category.name }}</option>
         </select>
-        <Link class="bg-green-500 text-white font-bold py-2 px-4 rounded hover:bg-green-600 cursor-pointer" :href="`/product-stock-list`">Clear Search</Link>
-    </div>
-    <div class="flex gap-2">
-        <div>
 
-        <label for="fromDate">From:</label>
-        <input v-model="form.fromDate" class="w-[200px] border border-gray-300 p-2" type="date">
-    </div>
-    <div>
-        <label for="toDate">To:</label>
-        <input v-model="form.toDate" class="w-[200px] border border-gray-300 p-2" type="date">
-    </div>
-    <div>
-        <button @click="submitForm()" class="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-600 cursor-pointer">Search</button>
-    </div>
+        <Link
+            class="bg-green-500 text-white font-bold py-2 px-4 rounded hover:bg-green-600 text-center md:inline-block"
+            :href="`/product-stock-list`"
+        >
+            Clear Search
+        </Link>
     </div>
 
+    <!-- Right Side (Date Inputs and Button) -->
+    <div class="flex flex-col gap-2 md:flex-row md:items-center md:gap-4 w-full md:w-auto">
+        <div class="flex flex-col">
+            <label for="fromDate">From:</label>
+            <input
+                v-model="form.fromDate"
+                class="border border-gray-300 p-2 rounded w-full md:w-[200px]"
+                type="date"
+            >
+        </div>
 
- </div>
+        <div class="flex flex-col">
+            <label for="toDate">To:</label>
+            <input
+                v-model="form.toDate"
+                class="border border-gray-300 p-2 rounded w-full md:w-[200px]"
+                type="date"
+            >
+        </div>
+
+        <div class="mt-2 md:mt-6">
+            <button
+                @click="submitForm()"
+                class="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-600 w-full md:w-auto"
+            >
+                Search
+            </button>
+        </div>
+    </div>
+</div>
+
   <p>Period : {{ fromDate?fromDate:'-' }} To {{ toDate?toDate:'-' }}</p>
   <p>Selected Category : {{ category_name?category_name:'-' }} </p>
 <EasyDataTable :headers="headers" :items="items" alternating :rows-per-page="5" :search-field="searchField" :search-value="searchItem">

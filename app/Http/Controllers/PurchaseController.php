@@ -7,6 +7,7 @@ use Inertia\Inertia;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Models\PurchaseProduct;
+use Illuminate\Support\Facades\Validator;
 
 class PurchaseController extends Controller
 {
@@ -36,15 +37,22 @@ class PurchaseController extends Controller
     //create purchase
     public function createPurchase(Request $request)
     {
-        $request->validate([
-            'product_name' => 'required',
-            'unit' => 'required',
+
+        $validator = Validator::make($request->all(), [
+             'product_name' => 'required',
+             'unit' => 'required',
         ]);
 
+        if ($validator->fails()) {
+            return Inertia::render('Purchase/PurchaseSavePage', [
+                'errors' => $validator->errors()
+            ]);
+        }
+        $unit_type=Product::where('id',$request->product_id)->first()->unit_type;
         $data = [
             'product_name' => $request->product_name,
             'unit' => $request->unit,
-            'unit_type' => $request->unit_type
+            'unit_type' => $unit_type
         ];
         try {
             PurchaseProduct::create($data);

@@ -12,9 +12,9 @@
       <!-- Modal Box -->
       <div class="bg-white w-full max-w-md rounded-lg shadow-lg p-6 relative">
         <label for="availabe_qty" >Available Qty</label>
-        <input v-model="product.unit" class="border border-gray-300 rounded-md px-4 py-2 w-full" type="text">
+        <input v-model="product.unit" class="border border-gray-300 rounded-md px-4 py-2 w-full" type="text" readonly>
         <label for="product_name" >Product Name</label>
-        <input v-model="product.name" class="border border-gray-300 rounded-md px-4 py-2 w-full" type="text">
+        <input v-model="product.name" class="border border-gray-300 rounded-md px-4 py-2 w-full" type="text" readonly>
         <label for="requistion_qty" >Requisition Qty</label>
         <input v-model="product.requisition_qty" class="border border-gray-300 rounded-md px-4 py-2 w-full" type="number">
         <label for="qty_type">Qty Type</label>
@@ -109,6 +109,7 @@
 
     </div>
     <div>
+        <input type="text" class="border border-gray-300 rounded-md px-4 py-2 w-[300px] mb-2" v-model="searchItem" placeholder="Search here">
         <EasyDataTable :headers="headers" :items="items" alternating :rows-per-page="10" :search-field="searchField" :search-value="searchItem">
             <template #item-action="{ id,unit,name,unit_type }">
                 <button @click="showModal(id,unit,name,unit_type)" class="bg-blue-500 text-white font-bold py-2 px-4 rounded">Add</button>
@@ -153,7 +154,7 @@ function showModal(id,unit,name,unit_type) {
 }
 
 const items=ref(page.props.products);
-const searchField = ref(["id","name"]);
+const searchField = ref(["id","name","category.name"]);
 const searchItem=ref();
 
 const productList = ref([]);
@@ -221,6 +222,10 @@ const form = useForm({
     total_by_pc: 0,
 })
 function createRequisiton(){
+    if(productList.value.length==0){
+        toaster.error('Please Add Product');
+        return;
+    }
     form.products=productList.value;
     form.total_by_coel=total.total_by_coel;
     form.total_by_feet=total.total_by_feet;

@@ -1,4 +1,5 @@
 <script setup>
+import { computed } from "vue";
 import { usePage, useForm, router } from "@inertiajs/vue3";
 import { createToaster } from "@meforma/vue-toaster";
 const toaster = createToaster({});
@@ -7,6 +8,8 @@ const page = usePage();
 
 const product_id = new URLSearchParams(window.location.search).get("product_id");
 const product = page.props.product;
+const errors = computed(() => page.props.flash.errors || {});
+
 
 let URL = "/create-product";
 
@@ -18,6 +21,8 @@ const form = useForm({
   product_id: product_id,
   minimum_stock:0
 });
+
+
 
 if (product_id != 0 && product != null) {
   form.name = product.name;
@@ -58,6 +63,7 @@ function submitForm() {
           type="text"
           class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
+        <p v-if="errors.name" class="text-red-500">{{ errors.name[0] }}</p>
       </div>
 
       <!-- Category -->
@@ -76,6 +82,7 @@ function submitForm() {
             {{ category.name }}
           </option>
         </select>
+         <p v-if="errors.category_id" class="text-red-500">{{ errors.category_id[0] }}</p>
       </div>
 
       <!-- Quantity -->
@@ -86,6 +93,7 @@ function submitForm() {
           type="number"
           class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
+        <p v-if="errors.unit" class="text-red-500">{{ errors.unit[0] }}</p>
       </div>
 
        <div>
@@ -95,6 +103,7 @@ function submitForm() {
           type="number"
           class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
+         <p v-if="errors.minimum_stock" class="text-red-500">{{ errors.minimum_stock[0] }}</p>
       </div>
 
       <!-- Unit type -->
@@ -109,6 +118,7 @@ function submitForm() {
           <option value="Coel">Coel</option>
           <option value="Pc">pc</option>
         </select>
+         <p v-if="errors.unit_type" class="text-red-500">{{ errors.unit_type[0] }}</p>
       </div>
 
       <!-- Submit Button -->

@@ -53,6 +53,7 @@ function submitForm() {
                     type="text"
                     class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
                 />
+                <p v-if="page.props.flash.errors" class="text-red-500">{{page.props.flash.errors.category_name[0] }}</p>
             </div>
 
             <div class="pt-3">

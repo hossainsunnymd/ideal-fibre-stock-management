@@ -16,86 +16,82 @@ use App\Http\Middleware\TokenVerificationMiddleWare;
 
 
 //user login
-Route::post('/login', [AuthController::class, 'login']);
-Route::get('/', [AuthController::class, 'loginPage']);
+Route::post('/login', [AuthController::class, 'login'])->name('login');
+Route::get('/', [AuthController::class, 'loginPage'])->name('loginPage');
 
 //user logout
-Route::get('/logout', [AuthController::class, 'logout']);
-
+Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // access for all users
-
 Route::middleware([TokenVerificationMiddleWare::class])->group(function () {
 
     //products
-    Route::get('/product-stock-list', [ProductController::class, 'productStockList']);
-    Route::get('/list-product', [ProductController::class, 'listProduct']);
-    Route::get('/product-save-page', [ProductController::class, 'productSavePage']);
-    Route::post('/create-product', [ProductController::class, 'createProduct']);
-    Route::post('/update-product', [ProductController::class, 'updateProduct']);
-    Route::get('/delete-product', [ProductController::class, 'deleteProduct']);
-
+    Route::get('/product-stock-list', [ProductController::class, 'productStockList'])->name('product.stock.list');
+    Route::get('/list-product', [ProductController::class, 'listProduct'])->name('product.list');
+    Route::get('/product-save-page', [ProductController::class, 'productSavePage'])->name('product.save.page');
+    Route::post('/create-product', [ProductController::class, 'createProduct'])->name('product.create');
+    Route::post('/update-product', [ProductController::class, 'updateProduct'])->name('product.update');
+    Route::get('/delete-product', [ProductController::class, 'deleteProduct'])->name('product.delete');
 
     //issue product
-    Route::get('/product-issue-page', [ProductController::class, 'productIssuePage']);
-    Route::post('/issue-product', [ProductController::class, 'issueProduct']);
+    Route::get('/product-issue-page', [ProductController::class, 'productIssuePage'])->name('product.issue.page');
+    Route::post('/issue-product', [ProductController::class, 'issueProduct'])->name('product.issue');
 
     //issue product list
-    Route::get('/issue-product-list', [ProductController::class, 'issueProductList']);
+    Route::get('/issue-product-list', [ProductController::class, 'issueProductList'])->name('product.issue.list');
 
     //damage product list
-    Route::get('/damage-product-list', [ProductController::class, 'damageProductList']);
+    Route::get('/damage-product-list', [ProductController::class, 'damageProductList'])->name('product.damage.list');
 
     //minimum product list
-    Route::get('/minimum-product-list', [ProductController::class, 'minimumProductList']);
-
+    Route::get('/minimum-product-list', [ProductController::class, 'minimumProductList'])->name('product.minimum.list');
 
     //categories
-    Route::get('/list-category', [CategoryController::class, 'listCategory']);
-    Route::get('/category-save-page', [CategoryController::class, 'categorySavePage']);
-    Route::post('/create-category', [CategoryController::class, 'createCategory']);
-    Route::post('/update-category', [CategoryController::class, 'updateCategory']);
-    Route::get('/delete-category', [CategoryController::class, 'deleteCategory']);
+    Route::get('/list-category', [CategoryController::class, 'listCategory'])->name('category.list');
+    Route::get('/category-save-page', [CategoryController::class, 'categorySavePage'])->name('category.save.page');
+    Route::post('/create-category', [CategoryController::class, 'createCategory'])->name('category.create');
+    Route::post('/update-category', [CategoryController::class, 'updateCategory'])->name('category.update');
+    Route::get('/delete-category', [CategoryController::class, 'deleteCategory'])->name('category.delete');
 
     //list requisitions
-    Route::get('/list-requisition', [RequisitionController::class, 'listRequisition']);
+    Route::get('/list-requisition', [RequisitionController::class, 'listRequisition'])->name('requisition.list');
 });
 
 //access for moderator and super admin
 Route::middleware([TokenVerificationMiddleWare::class, ModeratorMiddleware::class])->group(function () {
-    //requisitions
 
-    Route::get('/requisition-save-page', [RequisitionController::class, 'requisitionSavePage']);
-    Route::post('/create-requisition', [RequisitionController::class, 'createRequisition']);
-    Route::get('/delete-requisition', [RequisitionController::class, 'deleteRequisition']);
-    Route::get('/requisition-product-list', [RequisitionController::class, 'requisitionProductList']);
-    Route::post('/requisition-received-request', [RequisitionController::class, 'requisitionReceivedRequest']);
+    //requisitions
+    Route::get('/requisition-save-page', [RequisitionController::class, 'requisitionSavePage'])->name('requisition.save.page');
+    Route::post('/create-requisition', [RequisitionController::class, 'createRequisition'])->name('requisition.create');
+    Route::get('/delete-requisition', [RequisitionController::class, 'deleteRequisition'])->name('requisition.delete');
+    Route::get('/requisition-product-list', [RequisitionController::class, 'requisitionProductList'])->name('requisition.product.list');
+    Route::post('/requisition-received-request', [RequisitionController::class, 'requisitionReceivedRequest'])->name('requisition.received.request');
 });
 
 //super admin access
-
 Route::middleware([TokenVerificationMiddleWare::class, SuperAdminMiddleware::class])->group(function () {
+
     //users
-    Route::get('/list-user', [UserController::class, 'listUser']);
-    Route::get('/user-save-page', [UserController::class, 'userSavePage']);
-    Route::post('/create-user', [UserController::class, 'createUser']);
-    Route::post('/update-user', [UserController::class, 'updateUser']);
-    Route::get('/delete-user', [UserController::class, 'deleteUser']);
+    Route::get('/list-user', [UserController::class, 'listUser'])->name('user.list');
+    Route::get('/user-save-page', [UserController::class, 'userSavePage'])->name('user.save.page');
+    Route::post('/create-user', [UserController::class, 'createUser'])->name('user.create');
+    Route::post('/update-user', [UserController::class, 'updateUser'])->name('user.update');
+    Route::get('/delete-user', [UserController::class, 'deleteUser'])->name('user.delete');
 
     //requisitions
-    Route::get('/requisition-received-request-list', [RequisitionController::class, 'requisitionReceivedRequestList']);
-    Route::get('/requisition-approve-request', [RequisitionController::class, 'requisitionApproveRequest']);
-    Route::get('/edit-requisition-request-page', [RequisitionController::class, 'editRequisitionRequestPage']);
-    Route::post('/update-requisition-request', [RequisitionController::class, 'updateRequisitionRequest']);
+    Route::get('/requisition-received-request-list', [RequisitionController::class, 'requisitionReceivedRequestList'])->name('requisition.received.request.list');
+    Route::get('/requisition-approve-request', [RequisitionController::class, 'requisitionApproveRequest'])->name('requisition.approve.request');
+    Route::get('/edit-requisition-request-page', [RequisitionController::class, 'editRequisitionRequestPage'])->name('requisition.edit.request.page');
+    Route::post('/update-requisition-request', [RequisitionController::class, 'updateRequisitionRequest'])->name('requisition.update.request');
 });
 
 // access for admin and super admin
-
 Route::middleware([TokenVerificationMiddleWare::class, AdminMiddleware::class])->group(function () {
+
     //purchases
-    Route::get('/list-purchase', [PurchaseController::class, 'listPurchase']);
-    Route::get('/purchase-save-page', [PurchaseController::class, 'purchaseSavePage']);
-    Route::post('/create-purchase', [PurchaseController::class, 'createPurchase']);
-    Route::post('/update-purchase', [PurchaseController::class, 'updatePurchase']);
-    Route::get('/delete-purchase', [PurchaseController::class, 'deletePurchase']);
+    Route::get('/list-purchase', [PurchaseController::class, 'listPurchase'])->name('purchase.list');
+    Route::get('/purchase-save-page', [PurchaseController::class, 'purchaseSavePage'])->name('purchase.save.page');
+    Route::post('/create-purchase', [PurchaseController::class, 'createPurchase'])->name('purchase.create');
+    Route::post('/update-purchase', [PurchaseController::class, 'updatePurchase'])->name('purchase.update');
+    Route::get('/delete-purchase', [PurchaseController::class, 'deletePurchase'])->name('purchase.delete');
 });
