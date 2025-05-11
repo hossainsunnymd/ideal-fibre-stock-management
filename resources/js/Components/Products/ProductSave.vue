@@ -16,7 +16,7 @@ const form = useForm({
   unit: 0,
   unit_type: "",
   product_id: product_id,
-  mimimum_stock:0
+  minimum_stock:0
 });
 
 if (product_id != 0 && product != null) {

@@ -18,8 +18,8 @@ const printModal = () => {
 </script>
 
 <template>
-  <div v-if="modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/30">
-    <div id="modal-content" class="bg-white w-[500px] max-w-full rounded-xl shadow-2xl p-6 relative print:w-full print:shadow-none print:p-0">
+  <div v-if="modal" class="fixed inset-0 z-50 flex items-center justify-center">
+    <div id="modal-content" class="bg-white w-[500px] max-w-full rounded-xl shadow-2xl p-6 relative print:w-full print:shadow-none print:p-0 h-[500px] overflow-auto">
 
       <!-- Close Button -->
       <button @click="$emit('update:modal', false)" class="absolute top-3 right-3 text-gray-500 hover:text-red-600 text-2xl print:hidden">
@@ -32,23 +32,41 @@ const printModal = () => {
       </button>
 
       <!-- Title -->
-      <h2 class="text-2xl font-bold text-center mb-6 border-b pb-2 print:text-left">🧾 Requisition Summary</h2>
+      <h1 class="text-2xl font-bold text-center  pb-2"> Ideal Fibre Industries Ltd. </h1>
+      <h1 class="text-sm font-bold text-center  pb-2">Madya Norshingpur, Kashipur,Fatullah,Nayaranganj</h1>
+      <h1 class="text-1xl font-bold text-center mb-6  border-b  pb-2">Store PURCHASE REQUISITION</h1>
+      <div class="flex flex-col items-end mb-2">
+          <h1 class="w-[150px] border ">Indent No:</h1>
+           <h1 class="w-[150px] border print:text-left">Date:</h1>
+      </div>
 
       <!-- Table -->
-      <div class="overflow-x-auto">
+      <div class=" overflow-x-auto overflow-y-auto ">
         <table class="w-full border border-gray-300 text-sm">
           <thead class="bg-gray-100">
             <tr>
-              <th class="px-4 py-2 border-b text-left">#</th>
-              <th class="px-4 py-2 border-b text-left">Product Name</th>
-              <th class="px-4 py-2 border-b text-left">Quantity</th>
+              <th class="px-4 py-2 border text-center ">#</th>
+              <th class="px-4 py-2 border text-center ">Name of Item</th>
+              <th class="px-4 py-2 border text-center ">Size</th>
+              <th class="px-4 py-2 border text-center ">Unit</th>
+              <th class="px-4 py-2 border text-center ">Required Quantity</th>
+              <th class="px-4 py-2 border text-center">Present Stock</th>
+              <th class="px-4 py-2 border text-center">Store Code</th>
+              <th class="px-4 py-2 border text-center">Where to be use</th>
+              <th class="px-4 py-2 border text-center">Remarks</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(product, index) in props.products.requisition_products" :key="product.id" class="hover:bg-gray-50">
-              <td class="px-4 py-2 border-b">{{ index + 1 }}</td>
-              <td class="px-4 py-2 border-b">{{ product.product.name }}</td>
-              <td class="px-4 py-2 border-b">{{ product.total_requisition }}</td>
+            <tr v-for="(product, index) in props.products.requisition_products" :key="product.id" class="hover:bg-gray-50 border-1 print:border-2">
+              <td class="px-4 py-2 border">{{ index + 1 }}</td>
+              <td class="px-4 py-2 border">{{ product.product.name }}</td>
+              <td class="px-4 py-2 border">{{ }}</td>
+              <td class="px-4 py-2 border">{{  }}</td>
+              <td class="px-4 py-2 border">{{  product.total_requisition }}</td>
+              <td class="px-4 py-2 border">{{  }}</td>
+              <td class="px-4 py-2 border">{{  }}</td>
+              <td class="px-4 py-2 border">{{  }}</td>
+              <td class="px-4 py-2 border">{{ }}</td>
             </tr>
           </tbody>
         </table>
@@ -64,5 +82,27 @@ const printModal = () => {
 </template>
 
 <style scoped>
+@media print {
+  th, td {
+    border: 2px solid black !important;
+    font-weight: bold !important;
+    color: black !important;
+  }
+
+  table {
+    page-break-inside: auto;
+    width: 100% !important;
+    border-collapse: collapse !important;
+  }
+
+  tr {
+    page-break-inside: avoid;
+    page-break-after: auto;
+  }
+
+  thead {
+    display: table-header-group;
+  }
+}
 
 </style>
