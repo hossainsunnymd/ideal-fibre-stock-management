@@ -19,7 +19,7 @@ class ModeratorMiddleware
         if($userRole=='moderator' || $userRole=='superadmin'){
              return $next($request);
         }else{
-              return redirect('/login-page');
+              return redirect('/');
         }
 
     }

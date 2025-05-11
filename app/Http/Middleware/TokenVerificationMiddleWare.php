@@ -20,9 +20,14 @@ class TokenVerificationMiddleWare
         $token=$request->cookie('token');
 
         $result=JWTToken::verifyToken($token);
-        $user=User::where('email',$result->userEmail)->first();
-        if($result=="Unauthorized" || !$user){
+
+        $userEmail=$result->userEmail??null;
+        if(!$userEmail){
             return redirect('/login-page');
+        }
+        $user=User::where('email',$userEmail)->first();
+        if($result=="Unauthorized" || !$user){
+            return redirect('/');
         }else{
             return $next($request);
         }

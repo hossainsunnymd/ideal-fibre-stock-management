@@ -17,7 +17,7 @@ class SuperAdminMiddleware
     {
         $userRole=$request->session()->get('role');
         if($userRole!='superadmin'){
-            return redirect('/login-page');
+            return redirect('/');
         }else{
             return $next($request);
         }
