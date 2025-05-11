@@ -4,7 +4,7 @@ import { createToaster } from "@meforma/vue-toaster";
 const toaster = createToaster({ });
 const page=usePage();
 const user_id=new URLSearchParams(window.location.search).get('user_id');
-const user=page.props.user;
+const user=page.props.users;
 const form=useForm({
     user_id:user_id,
     name:'',
@@ -74,7 +74,7 @@ function submitForm() {
         <select v-model="form.role" name="role" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" >
           <option value="">Select Role</option>
           <option value="admin">Admin</option>
-          <option value="manager">Manager</option>
+          <option value="moderator">Moderator</option>
         </select>
       </div>
       <p v-if="form.errors.role" class="text-red-500">{{ form.errors.role[0] }}</p>

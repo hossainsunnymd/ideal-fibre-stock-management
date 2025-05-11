@@ -36,6 +36,9 @@ class HandleInertiaRequests extends Middleware
     public function share(Request $request): array
     {
         return [
+            'user'=>[
+                'role'=>$request->session()->get('role')
+            ],
            'flash'=>[
                'status'=>$request->session()->pull('status'),
                'message'=>$request->session()->pull('message')

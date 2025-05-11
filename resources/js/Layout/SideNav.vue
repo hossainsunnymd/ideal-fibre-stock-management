@@ -1,3 +1,19 @@
+<script setup>
+  import { ref } from 'vue'
+  import { Link,usePage } from '@inertiajs/vue3'
+
+  const page = usePage();
+
+  const sidebarOpen = ref(false)
+
+  const toggleSidebar = () => {
+    sidebarOpen.value = !sidebarOpen.value
+  }
+
+
+  </script>
+
+
 <template>
     <div class="flex min-h-screen bg-gray-100 font-sans">
 
@@ -22,7 +38,7 @@
         </div>
         <nav class="p-4 flex-1 overflow-y-auto">
           <ul class="space-y-2">
-              <li>
+              <li v-if="page.props.user.role=='superadmin'">
               <Link
                 :href="`/list-user`"
                 class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-700 transition-colors"
@@ -69,7 +85,7 @@
               </Link>
             </li>
 
-            <li>
+            <li v-if="page.props.user.role == 'moderator'|| page.props.user.role == 'superadmin'">
               <Link
                 :href="`/requisition-product-list`"
                 class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-700 transition-colors"
@@ -89,7 +105,7 @@
               </Link>
             </li>
 
-              <li>
+              <li v-if="page.props.user.role == 'admin'|| page.props.user.role == 'superadmin'">
               <Link
                 :href="`/list-purchase`"
                 class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-700 transition-colors"
@@ -109,7 +125,7 @@
               </Link>
             </li>
 
-             <li>
+             <li v-if="page.props.user.role == 'superadmin'">
               <Link
                 :href="`/requisition-received-request-list`"
                 class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-700 transition-colors"
@@ -153,23 +169,5 @@
     </div>
   </template>
 
-  <script setup>
-  import { ref } from 'vue'
-  import { Link } from '@inertiajs/vue3'
-
-  const sidebarOpen = ref(false)
-
-  const toggleSidebar = () => {
-    sidebarOpen.value = !sidebarOpen.value
-  }
-
-  const menuItems = [
-    { icon: 'person', label: 'Customer' },
-    { icon: 'category', label: 'Category' },
-    { icon: 'inventory', label: 'Products' },
-    { icon: 'receipt', label: 'Invoices' },
-    { icon: 'shopping_cart', label: 'Create Sale' },
-  ]
-  </script>
 
 

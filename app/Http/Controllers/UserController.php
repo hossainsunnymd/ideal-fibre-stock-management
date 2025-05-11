@@ -21,8 +21,8 @@ class UserController extends Controller
     //user save page
     public function userSavePage(Request $request){
         $userId=$request->user_id;
-        $user=User::where('id',$userId)->first();
-        return Inertia::render('Users/UserSavePage',['user'=>$user]);
+        $users=User::where('id',$userId)->first();
+        return Inertia::render('Users/UserSavePage',['users'=>$users]);
     }
 
     //create user

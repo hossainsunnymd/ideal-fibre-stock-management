@@ -8,6 +8,7 @@ const headers = [
     { text: 'Total Received', value: 'total_received' },
     { text: 'Total Issue', value: 'total_issue' },
 ]
+console.log(page.props.user.role);
 
 const items=ref(page.props.productList);
 const searchField = ref(["available_unit","product_name","total_received","total_issue"]);

@@ -3,12 +3,10 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use App\Models\User;
-use App\Helper\JWTToken;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class TokenVerificationMiddleWare
+class AdminMiddleware
 {
     /**
      * Handle an incoming request.
@@ -17,15 +15,14 @@ class TokenVerificationMiddleWare
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $token=$request->cookie('token');
+        $userRole=$request->session()->get('role');
+        if($userRole=='admin' || $userRole=='superadmin'){
+             return $next($request);
 
-        $result=JWTToken::verifyToken($token);
-        $user=User::where('email',$result->userEmail)->first();
-        if($result=="Unauthorized" || !$user){
-            return redirect('/login-page');
         }else{
-            return $next($request);
+             return redirect('/login-page');
         }
+
 
     }
 }
