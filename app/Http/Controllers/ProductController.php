@@ -204,7 +204,7 @@ class ProductController extends Controller
             'unit' => 'required',
             'unit_type' => 'required',
             'category_id' => 'required',
-            'mimimum_stock' => 'required'
+            'minimum_stock' => 'required'
         ]);
 
         try {
@@ -213,7 +213,7 @@ class ProductController extends Controller
                 'category_id' => $request->category_id,
                 'unit' => $request->unit,
                 'unit_type' => $request->unit_type,
-                'minimum_stock' => $request->mimimum_stock
+                'minimum_stock' => $request->minimum_stock
             ];
             Product::create($data);
             return redirect()->back()->with(['status' => true, 'message' => 'Product created successfully']);

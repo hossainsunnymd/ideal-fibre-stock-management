@@ -24,7 +24,7 @@ if (product_id != 0 && product != null) {
   form.category_id = product.category_id;
   form.unit = product.unit;
   form.unit_type = product.unit_type;
-  form.mimimum_stock=product.mimimum_stock;
+  form.minimum_stock=product.minimum_stock;
   URL = "/update-product";
 }
 
@@ -91,7 +91,7 @@ function submitForm() {
        <div>
         <label for="quantity" class="block text-sm font-medium text-gray-700 mb-1">Minimum Quantity</label>
         <input
-          v-model="form.mimimum_stock"
+          v-model="form.minimum_stock"
           type="number"
           class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
