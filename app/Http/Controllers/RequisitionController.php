@@ -55,7 +55,8 @@ class RequisitionController extends Controller
     public function requisitionSavePage()
     {
         $products = Product::with('category')->get();
-        return Inertia::render('Requisition/RequisitionSavePage',['products'=>$products]);
+        $minimumProducts = Product::whereColumn('unit', '<=', 'minimum_stock')->with('category')->get();
+        return Inertia::render('Requisition/RequisitionSavePage',['products'=>$products,'minimumProducts'=>$minimumProducts]);
     }
 
     //requisition received request

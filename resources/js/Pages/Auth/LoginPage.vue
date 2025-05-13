@@ -1,6 +1,7 @@
 <script setup>
 import { useForm,router,usePage, Link } from '@inertiajs/vue3';
 import { createToaster } from "@meforma/vue-toaster";
+import { computed } from 'vue';
 
 const toaster = createToaster({ });
 
@@ -21,6 +22,8 @@ function submitForm() {
     })
 }
 
+const errors=computed(() => page.props.flash.errors || {});
+
 </script>
 
 <template>
@@ -40,6 +43,7 @@ function submitForm() {
           type="email"
           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all"
         />
+        <p v-if="errors.email" class="text-red-500">{{ errors.email[0] }}</p>
 
       </div>
 
@@ -49,6 +53,7 @@ function submitForm() {
           type="password"
           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all"
         />
+        <p v-if="errors.password" class="text-red-500">{{ errors.password[0] }}</p>
 
       </div>
 

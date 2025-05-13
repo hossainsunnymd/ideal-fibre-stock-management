@@ -10,6 +10,7 @@ const headers = [
     {text:'Product Name',value:'name'},
     {text:'Category',value:'category.name'},
     {text:'Quantity',value:'unit'},
+    {text:'Unit Type',value:'unit_type'},
     {text:'Action',value:'action'},
 ]
 const items=ref(page.props.products);

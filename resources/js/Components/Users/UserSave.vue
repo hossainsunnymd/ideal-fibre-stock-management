@@ -1,6 +1,6 @@
 <script setup>
 import {usePage,useForm,router } from '@inertiajs/vue3';
-import { computed, readonly } from 'vue';
+import { computed } from 'vue';
 import { createToaster } from "@meforma/vue-toaster";
 const toaster = createToaster({ });
 const page=usePage();
@@ -16,7 +16,6 @@ const form=useForm({
     phone:'',
 })
 
-console.log(page.props.flash.errors);
 let URL='/create-user';
 if(user_id != 0 && user != null){
     form.name=user.name;

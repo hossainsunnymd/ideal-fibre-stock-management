@@ -8,7 +8,6 @@ const headers = [
     { text: 'Total Received', value: 'total_received' },
     { text: 'Total Issue', value: 'total_issue' },
 ]
-console.log(page.props.user.role);
 
 const items=ref(page.props.productList);
 const searchField = ref(["available_unit","product_name","total_received","total_issue"]);
@@ -33,62 +32,77 @@ function submitForm(){
 
 <template>
      <p class="text-2xl font-bold">All Product Stock List</p>
-<div class="flex flex-col gap-4 md:flex-row md:justify-between">
-    <!-- Left Side (Search Inputs) -->
-    <div class="flex flex-col gap-4 md:flex-row md:items-center md:gap-5 w-full">
-        <input
-            type="text"
-            class="border border-gray-300 rounded-md px-4 py-2 w-full md:w-[250px]"
-            v-model="searchItem"
-            placeholder="Search here"
-        >
+<div class="flex flex-col gap-4 lg:flex-row lg:justify-between">
+  <!-- Left Section -->
+  <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:gap-5 w-full">
+    <!-- Search input -->
+    <input
+      type="text"
+      class="border border-gray-300 rounded-md px-4 py-2 w-full lg:w-[250px]"
+      v-model="searchItem"
+      placeholder="Search here"
+    />
 
-        <select
-            v-model="form.category_id"
-            class="border border-gray-300 rounded-md px-4 py-2 w-full md:w-[250px]"
-        >
-            <option>Select Category</option>
-            <option v-for="category in page.props.categories" :value="category.id">{{ category.name }}</option>
-        </select>
+    <!-- Category select -->
+    <select
+      v-model="form.category_id"
+      class="border border-gray-300 rounded-md px-4 py-2 w-full lg:w-[250px]"
+    >
+      <option>Select Category</option>
+      <option
+        v-for="category in page.props.categories"
+        :value="category.id"
+        :key="category.id"
+      >
+        {{ category.name }}
+      </option>
+    </select>
 
-        <Link
-            class="bg-green-500 text-white font-bold py-2 px-4 rounded hover:bg-green-600 text-center md:inline-block"
-            :href="`/product-stock-list`"
-        >
-            Clear Search
-        </Link>
+    <!-- Clear Search button -->
+    <Link
+      class="bg-green-500 text-white font-bold py-2 px-4 rounded hover:bg-green-600 text-center w-full lg:w-auto"
+      :href="`/product-stock-list`"
+    >
+      Clear Search
+    </Link>
+  </div>
+
+  <!-- Right Section -->
+  <div class="flex flex-col gap-4 lg:flex-row lg:items-end w-full lg:w-auto">
+    <!-- From Date -->
+    <div class="flex flex-col w-full lg:w-[200px]">
+      <label for="fromDate" class="mb-1">From:</label>
+      <input
+        v-model="form.fromDate"
+        id="fromDate"
+        class="border border-gray-300 p-2 rounded w-full"
+        type="date"
+      />
     </div>
 
-    <!-- Right Side (Date Inputs and Button) -->
-    <div class="flex flex-col gap-2 md:flex-row md:items-center md:gap-4 w-full md:w-auto">
-        <div class="flex flex-col">
-            <label for="fromDate">From:</label>
-            <input
-                v-model="form.fromDate"
-                class="border border-gray-300 p-2 rounded w-full md:w-[200px]"
-                type="date"
-            >
-        </div>
-
-        <div class="flex flex-col">
-            <label for="toDate">To:</label>
-            <input
-                v-model="form.toDate"
-                class="border border-gray-300 p-2 rounded w-full md:w-[200px]"
-                type="date"
-            >
-        </div>
-
-        <div class="mt-2 md:mt-6">
-            <button
-                @click="submitForm()"
-                class="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-600 w-full md:w-auto"
-            >
-                Search
-            </button>
-        </div>
+    <!-- To Date -->
+    <div class="flex flex-col w-full lg:w-[200px]">
+      <label for="toDate" class="mb-1">To:</label>
+      <input
+        v-model="form.toDate"
+        id="toDate"
+        class="border border-gray-300 p-2 rounded w-full"
+        type="date"
+      />
     </div>
+
+    <!-- Search Button -->
+    <div class="w-full lg:w-auto">
+      <button
+        @click="submitForm()"
+        class="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-600 w-full lg:w-auto"
+      >
+        Search
+      </button>
+    </div>
+  </div>
 </div>
+
 
   <p>Period : {{ fromDate?fromDate:'-' }} To {{ toDate?toDate:'-' }}</p>
   <p>Selected Category : {{ category_name?category_name:'-' }} </p>
