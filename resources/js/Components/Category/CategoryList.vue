@@ -7,10 +7,11 @@ const toaster = createToaster({ });
 const page=usePage()
 
 const headers = [
-    { text: 'ID', value: 'id' },
-    { text: 'Name', value: 'name' },
-    { text: 'Action', value: 'action' },
+  { text: 'ID', value: 'id' },
+  { text: 'Name', value: 'name' },
+  ...(page.props.user.role != 'moderator' ? [{ text: 'Action', value: 'action' }] : [])
 ];
+
 
 const items=ref(page.props.categories);
 const searchField = ref("name");
@@ -54,7 +55,7 @@ if(page.props.flash.status==true){
 </div>
 
 <EasyDataTable :headers="headers" :items="items" alternating :rows-per-page="5" :search-field="searchField" :search-value="searchItem">
-    <template #item-action="{ id }">
+    <template v-if="page.props.user.role!='moderator'" #item-action="{ id }">
         <Link :href="`/category-save-page?category_id=${id}`" class="bg-blue-500 text-white font-bold py-2 px-4 rounded">Edit</Link>
         <button @click="deleteCategory(id)" class="bg-red-500 text-white font-bold py-2 px-4 rounded ml-1">Delete</button>
     </template>

@@ -67,10 +67,11 @@ function submitForm() {
                 type="date"
             >
         </div>
+            <button class="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-600 w-full md:w-auto mt-[23px]">view all</button>
         <div>
             <button
                 @click="submitForm()"
-                class="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-600 w-full md:w-auto"
+                class="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-600 w-full md:w-auto mt-[23px]"
             >
                 Search
             </button>

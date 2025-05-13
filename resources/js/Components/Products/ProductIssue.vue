@@ -51,7 +51,7 @@ function submitForm() {
     <!-- Date Filter & Button -->
     <div class="flex flex-col gap-3 md:flex-row md:items-center">
         <div>
-            <label for="fromDate" class="block mb-1">From:</label>
+            <label for="fromDate" class="block ">From:</label>
             <input
                 v-model="form.fromDate"
                 class="w-full md:w-[200px] border border-gray-300 p-2 rounded"
@@ -59,7 +59,7 @@ function submitForm() {
             >
         </div>
         <div>
-            <label for="toDate" class="block mb-1">To:</label>
+            <label for="toDate" class="block">To:</label>
             <input
                 v-model="form.toDate"
                 class="w-full md:w-[200px] border border-gray-300 p-2 rounded"
@@ -69,7 +69,7 @@ function submitForm() {
         <div>
             <button
                 @click="submitForm()"
-                class="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-600 w-full md:w-auto"
+                class="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-600 w-full md:w-auto mt-[22px]"
             >
                 Search
             </button>

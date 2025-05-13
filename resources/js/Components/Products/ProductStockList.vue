@@ -1,15 +1,22 @@
 <script setup>
 import {usePage,useForm,Link} from "@inertiajs/vue3";
+import ProductStockDetails from "./ProductStockDetails.vue";
 import {ref} from "vue";
 const page=usePage();
 const headers = [
     { text: 'Name', value: 'product_name' },
+    { text: 'Category', value: 'category_name' },
+    { text: 'Parts No', value: 'parts_no' },
+    { text: 'Rack No', value: 'rack_no' },
+    { text: 'Column No', value: 'column_no' },
+    { text: 'Row No', value: 'row_no' },
     { text: 'Available stock', value: 'available_unit' },
     { text: 'Total Received', value: 'total_received' },
     { text: 'Total Issue', value: 'total_issue' },
 ]
 
 const items=ref(page.props.productList);
+const modal = ref(false);
 const searchField = ref(["available_unit","product_name","total_received","total_issue"]);
 const searchItem=ref();
 const fromDate=new URLSearchParams(window.location.search).get('fromDate');
@@ -28,9 +35,14 @@ function submitForm(){
     form.get('/product-stock-list');
 }
 
+function showModal(){
+    modal.value=true;
+}
+
 </script>
 
 <template>
+    <ProductStockDetails v-model:modal="modal" :items="items" :fromDate="form.fromDate" :toDate="form.toDate"/>
      <p class="text-2xl font-bold">All Product Stock List</p>
 <div class="flex flex-col gap-4 lg:flex-row lg:justify-between">
   <!-- Left Section -->
@@ -65,6 +77,7 @@ function submitForm(){
     >
       Clear Search
     </Link>
+    <button @click="showModal()" class=" cursor-pointer bg-gray-500 text-white font-bold py-2 px-4 rounded hover:bg-gray-600 text-center w-full lg:w-auto">view all</button>
   </div>
 
   <!-- Right Section -->
@@ -79,7 +92,6 @@ function submitForm(){
         type="date"
       />
     </div>
-
     <!-- To Date -->
     <div class="flex flex-col w-full lg:w-[200px]">
       <label for="toDate" class="mb-1">To:</label>

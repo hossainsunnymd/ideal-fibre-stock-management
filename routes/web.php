@@ -28,10 +28,8 @@ Route::middleware([TokenVerificationMiddleWare::class])->group(function () {
     //products
     Route::get('/product-stock-list', [ProductController::class, 'productStockList'])->name('product.stock.list');
     Route::get('/list-product', [ProductController::class, 'listProduct'])->name('product.list');
-    Route::get('/product-save-page', [ProductController::class, 'productSavePage'])->name('product.save.page');
     Route::post('/create-product', [ProductController::class, 'createProduct'])->name('product.create');
-    Route::post('/update-product', [ProductController::class, 'updateProduct'])->name('product.update');
-    Route::get('/delete-product', [ProductController::class, 'deleteProduct'])->name('product.delete');
+
 
     //issue product
     Route::get('/product-issue-page', [ProductController::class, 'productIssuePage'])->name('product.issue.page');
@@ -48,10 +46,8 @@ Route::middleware([TokenVerificationMiddleWare::class])->group(function () {
 
     //categories
     Route::get('/list-category', [CategoryController::class, 'listCategory'])->name('category.list');
-    Route::get('/category-save-page', [CategoryController::class, 'categorySavePage'])->name('category.save.page');
     Route::post('/create-category', [CategoryController::class, 'createCategory'])->name('category.create');
-    Route::post('/update-category', [CategoryController::class, 'updateCategory'])->name('category.update');
-    Route::get('/delete-category', [CategoryController::class, 'deleteCategory'])->name('category.delete');
+
 
     //list requisitions
     Route::get('/list-requisition', [RequisitionController::class, 'listRequisition'])->name('requisition.list');
@@ -63,7 +59,6 @@ Route::middleware([TokenVerificationMiddleWare::class, ModeratorMiddleware::clas
     //requisitions
     Route::get('/requisition-save-page', [RequisitionController::class, 'requisitionSavePage'])->name('requisition.save.page');
     Route::post('/create-requisition', [RequisitionController::class, 'createRequisition'])->name('requisition.create');
-    Route::get('/delete-requisition', [RequisitionController::class, 'deleteRequisition'])->name('requisition.delete');
     Route::get('/requisition-product-list', [RequisitionController::class, 'requisitionProductList'])->name('requisition.product.list');
     Route::post('/requisition-received-request', [RequisitionController::class, 'requisitionReceivedRequest'])->name('requisition.received.request');
 });
@@ -83,6 +78,7 @@ Route::middleware([TokenVerificationMiddleWare::class, SuperAdminMiddleware::cla
     Route::get('/requisition-approve-request', [RequisitionController::class, 'requisitionApproveRequest'])->name('requisition.approve.request');
     Route::get('/edit-requisition-request-page', [RequisitionController::class, 'editRequisitionRequestPage'])->name('requisition.edit.request.page');
     Route::post('/update-requisition-request', [RequisitionController::class, 'updateRequisitionRequest'])->name('requisition.update.request');
+    Route::get('/delete-requisition', [RequisitionController::class, 'deleteRequisition'])->name('requisition.delete');
 });
 
 // access for admin and super admin
@@ -94,4 +90,14 @@ Route::middleware([TokenVerificationMiddleWare::class, AdminMiddleware::class])-
     Route::post('/create-purchase', [PurchaseController::class, 'createPurchase'])->name('purchase.create');
     Route::post('/update-purchase', [PurchaseController::class, 'updatePurchase'])->name('purchase.update');
     Route::get('/delete-purchase', [PurchaseController::class, 'deletePurchase'])->name('purchase.delete');
+
+    //products
+     Route::post('/update-product', [ProductController::class, 'updateProduct'])->name('product.update');
+     Route::get('/delete-product', [ProductController::class, 'deleteProduct'])->name('product.delete');
+     Route::get('/product-save-page', [ProductController::class, 'productSavePage'])->name('product.save.page');
+
+     //category
+    Route::post('/update-category', [CategoryController::class, 'updateCategory'])->name('category.update');
+    Route::get('/delete-category', [CategoryController::class, 'deleteCategory'])->name('category.delete');
+    Route::get('/category-save-page', [CategoryController::class, 'categorySavePage'])->name('category.save.page');
 });

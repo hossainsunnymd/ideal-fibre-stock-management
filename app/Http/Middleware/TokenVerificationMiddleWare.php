@@ -23,7 +23,7 @@ class TokenVerificationMiddleWare
 
         $userEmail=$result->userEmail??null;
         if(!$userEmail){
-            return redirect('/login-page');
+            return redirect('/');
         }
         $user=User::where('email',$userEmail)->first();
         if($result=="Unauthorized" || !$user){

@@ -37,6 +37,28 @@
                     type="text"
                 />
 
+                 <label for="remarks">Remarks</label>
+                <input
+                    v-model="product.remarks"
+                    class="border border-gray-300 rounded-md px-4 py-2 w-full"
+                    type="text"
+                />
+
+                 <label for="store_code">Store Code</label>
+                <input
+                    v-model="product.store_code"
+                    class="border border-gray-300 rounded-md px-4 py-2 w-full"
+                    type="text"
+                />
+
+                 <label for="where_to_use">Where To Use</label>
+                <input
+
+                    v-model="product.where_to_use"
+                    class="border border-gray-300 rounded-md px-4 py-2 w-full"
+                    type="text"
+                />
+
                 <!-- Action buttons -->
                 <div class="flex justify-end mt-6 space-x-2">
                     <button
@@ -221,6 +243,10 @@ const product = reactive({
     unit_type: "",
     name: "",
     requisition_qty: 0,
+    where_to_use: "",
+    remarks: "",
+    store_code: "",
+
 });
 function showModal(id, unit, name, unit_type) {
     product.id = id;
@@ -258,6 +284,9 @@ function addProduct() {
             name: product.name,
             unit_type: product.unit_type,
             requisition_qty: product.requisition_qty,
+            where_to_use: product.where_to_use,
+            remarks: product.remarks,
+            store_code: product.store_code
         };
         productList.value.push(confirmProduct);
         modal.value = false;

@@ -25,6 +25,7 @@ const products=ref();
 function showModal(id) {
     products.value=items.value.find(item=>item.id==id);
     modal.value = true
+    console.log(products.value);
 }
 
 function deleteRequisition(id) {
@@ -50,7 +51,7 @@ if(page.props.flash.status==true){
 <EasyDataTable :headers="headers" :items="items" alternating :rows-per-page="5" :search-field="searchField" :search-value="searchItem">>
     <template #item-action="{ id }">
         <button @click="showModal(id)" class="cursor-pointer" ><i class="material-icons text-gray-600 text-xl">visibility</i></button>
-        <button @click="deleteRequisition(id)" class="cursor-pointer" ><i class="material-icons text-red-600 text-xl">delete</i></button>
+        <button v-if="page.props.user.role!='moderator'" @click="deleteRequisition(id)" class="cursor-pointer" ><i class="material-icons text-red-600 text-xl">delete</i></button>
     </template>
 </EasyDataTable>
 <Link :href="`/requisition-save-page`" class="bg-green-500 text-white  py-2 px-4 rounded w-[200px]">Create new Requisition</Link>

@@ -39,16 +39,13 @@ class PurchaseController extends Controller
     {
 
         $validator = Validator::make($request->all(), [
-             'product_name' => 'required',
-             'unit' => 'required',
+             'unit' => 'required|numeric|min:1',
         ]);
 
         if ($validator->fails()) {
-            return Inertia::render('Purchase/PurchaseSavePage', [
-                'errors' => $validator->errors()
-            ]);
+           return redirect()->back()->with(['errors' => $validator->errors()]);
         }
-        $unit_type=Product::where('id',$request->product_id)->first()->unit_type;
+        $unit_type=Product::where('id',$request->seltected_product_id)->first()->unit_type;
         $data = [
             'product_name' => $request->product_name,
             'unit' => $request->unit,

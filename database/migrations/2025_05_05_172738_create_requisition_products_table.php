@@ -22,6 +22,9 @@ return new class extends Migration
             $table->decimal('total_requisition',15,2);
             $table->decimal('total_received',15,2);
             $table->string('status')->default('pending');
+            $table->string('remarks')->nullable();
+            $table->string('where_to_use')->nullable();
+            $table->string('store_code')->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });

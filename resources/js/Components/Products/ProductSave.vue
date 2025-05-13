@@ -19,7 +19,11 @@ const form = useForm({
   unit: 0,
   unit_type: "",
   product_id: product_id,
-  minimum_stock:0
+  minimum_stock:0,
+  parts_no: "",
+  rack_no: "",
+  column_no: "",
+  row_no: "",
 });
 
 
@@ -30,6 +34,10 @@ if (product_id != 0 && product != null) {
   form.unit = product.unit;
   form.unit_type = product.unit_type;
   form.minimum_stock=product.minimum_stock;
+  form.parts_no=product.parts_no;
+  form.rack_no=product.rack_no;
+  form.column_no=product.column_no;
+  form.row_no=product.row_no;
   URL = "/update-product";
 }
 
@@ -104,6 +112,42 @@ function submitForm() {
           class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
          <p v-if="errors.minimum_stock" class="text-red-500">{{ errors.minimum_stock[0] }}</p>
+      </div>
+
+       <div>
+        <label for="parts_no" class="block text-sm font-medium text-gray-700 mb-1">Parts No</label>
+        <input
+          v-model="form.parts_no"
+          type="text"
+          class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
+        />
+      </div>
+
+       <div>
+        <label for="rack_no" class="block text-sm font-medium text-gray-700 mb-1"> Rack No</label>
+        <input
+          v-model="form.rack_no"
+          type="text"
+          class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
+        />
+      </div>
+
+       <div>
+        <label for="column_no" class="block text-sm font-medium text-gray-700 mb-1"> Column No</label>
+        <input
+          v-model="form.column_no"
+          type="text"
+          class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
+        />
+      </div>
+
+       <div>
+        <label for="row_no" class="block text-sm font-medium text-gray-700 mb-1"> Row No</label>
+        <input
+          v-model="form.row_no"
+          type="text"
+          class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
+        />
       </div>
 
       <!-- Unit type -->

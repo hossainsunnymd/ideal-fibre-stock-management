@@ -40,7 +40,9 @@ class RequisitionController extends Controller
                     'product_id' => $product['id'],
                     'total_requisition' => $product['requisition_qty'],
                     'total_received' => 0,
-
+                    'remarks' => $product['remarks'],
+                    'where_to_use' => $product['where_to_use'],
+                    'store_code' => $product['store_code'],
                 ]);
             }
             DB::commit();

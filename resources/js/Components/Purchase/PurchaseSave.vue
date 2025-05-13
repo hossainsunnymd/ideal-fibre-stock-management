@@ -1,10 +1,11 @@
 <script setup>
 import { usePage, useForm, router } from "@inertiajs/vue3";
-import { ref } from "vue";
+import { ref,computed } from "vue";
 import { createToaster } from "@meforma/vue-toaster";
 const toaster = createToaster({});
-
 const page = usePage();
+
+const errors = computed(() => page.props.flash.errors || {});
 
 const purchase_id = new URLSearchParams(window.location.search).get("purchase_id");
 const purchaseProduct = page.props.purchaseProduct;
@@ -16,16 +17,21 @@ const form = useForm({
   unit: 0,
   unit_type: "",
   purchase_id: purchase_id,
+  seltected_product_id:0
 });
 
 if (purchase_id != 0 && purchaseProduct != null) {
   form.product_name = purchaseProduct.product_name;
   form.unit = purchaseProduct.unit;
-  form.product_id=id
   URL = "/update-purchase";
 }
 
 function submitForm() {
+    if(form.seltected_product_id==0){
+        toaster.error("Please select a product");
+        return;
+
+    }
 
   form.post(URL, {
     preserveScroll: true,
@@ -41,7 +47,7 @@ function submitForm() {
 }
 function selectProduct(name,id){
     form.product_name=name
-    form.product_id=id
+    form.seltected_product_id=id
 }
 
 const headers = [
@@ -72,7 +78,6 @@ const searchItem=ref();
           class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
           readonly
         />
-        <p v-if="form.errors.product_name" class="text-red-500">{{form.product_name[0]}}</p>
       </div>
 
 
@@ -84,7 +89,7 @@ const searchItem=ref();
           type="number"
           class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
-        <p v-if="form.errors.unit" class="text-red-500">{{ form.errors.unit[0] }}</p>
+        <p v-if="errors.unit" class="text-red-500">{{ errors.unit[0] }}</p>
       </div>
 
       <!-- Submit Button -->

@@ -11,6 +11,10 @@ const headers = [
     {text:'Category',value:'category.name'},
     {text:'Quantity',value:'unit'},
     {text:'Unit Type',value:'unit_type'},
+    {text:'Parts No',value:'parts_no'},
+    {text:'Rack No',value:'rack_no'},
+    {text:'Column No',value:'column_no'},
+    {text:'Row No',value:'row_no'},
     {text:'Action',value:'action'},
 ]
 const items=ref(page.props.products);
@@ -56,8 +60,8 @@ if(page.props.flash.status==true){
 <EasyDataTable :headers="headers" :items="items" alternating :rows-per-page="5" :search-field="searchField" :search-value="searchItem">
 
     <template #item-action="{ id }">
-        <Link :href="`/product-save-page?product_id=${id}`" class="bg-blue-500 text-white font-bold py-2 px-4 rounded">Edit</Link>
-        <button @click="deleteProduct(id)" class="bg-red-500 text-white font-bold py-2 px-4 rounded ml-1">Delete</button>
+        <Link v-if="page.props.user.role!='moderator'" :href="`/product-save-page?product_id=${id}`" class="bg-blue-500 text-white font-bold py-2 px-4 rounded">Edit</Link>
+        <button v-if="page.props.user.role!='moderator'" @click="deleteProduct(id)" class="bg-red-500 text-white font-bold py-2 px-4 rounded ml-1">Delete</button>
         <Link :href="`/product-issue-page?product_id=${id}`" class="bg-indigo-500 text-white font-bold py-2 px-4 rounded ml-1">Issue</Link>
     </template>
 

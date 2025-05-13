@@ -72,6 +72,11 @@ class ProductController extends Controller
             }
             $productList[] = [
                 'available_unit' => $product->unit,
+                'category_name' => $product->category->name,
+                'parts_no' => $product->parts_no,
+                'rack_no' => $product->rack_no,
+                'column_no' => $product->column_no,
+                'row_no' => $product->row_no,
                 'product_name' => $product->name,
                 'total_received' => $totalReceived,
                 'total_issue' => $totalIssue,
@@ -206,7 +211,7 @@ class ProductController extends Controller
             'unit' => 'required|numeric|min:1',
             'unit_type' => 'required',
             'category_id' => 'required',
-            'minimum_stock' => 'required|numeric|min:1'
+            'minimum_stock' => 'required|numeric|min:1',
         ]);
         if($validator->fails()){
            return redirect()->back()->with(['errors' => $validator->errors()]);
@@ -218,7 +223,11 @@ class ProductController extends Controller
                 'category_id' => $request->category_id,
                 'unit' => $request->unit,
                 'unit_type' => $request->unit_type,
-                'minimum_stock' => $request->minimum_stock
+                'minimum_stock' => $request->minimum_stock,
+                'parts_no' => $request->parts_no,
+                'rack_no' => $request->rack_no,
+                'column_no' => $request->column_no,
+                'row_no' => $request->row_no
             ];
             Product::create($data);
             return redirect()->back()->with(['status' => true, 'message' => 'Product created successfully']);
@@ -244,12 +253,16 @@ class ProductController extends Controller
         }
 
         try {
-            $data = [
+           $data = [
                 'name' => $request->name,
                 'category_id' => $request->category_id,
                 'unit' => $request->unit,
                 'unit_type' => $request->unit_type,
-                'minimum_stock' => $request->minimum_stock
+                'minimum_stock' => $request->minimum_stock,
+                'parts_no' => $request->parts_no,
+                'rack_no' => $request->rack_no,
+                'column_no' => $request->column_no,
+                'row_no' => $request->row_no
             ];
             Product::where('id', $request->product_id)->update($data);
             return redirect()->back()->with(['status' => true, 'message' => 'Product updated successfully']);
