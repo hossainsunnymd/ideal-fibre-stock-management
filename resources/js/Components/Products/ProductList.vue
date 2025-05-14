@@ -17,7 +17,7 @@ const headers = [
     {text:'Row No',value:'row_no'},
     {text:'Action',value:'action'},
 ]
-const items=ref(page.props.products);
+const items=ref(page.props.products.data);
 const searchField = ref(["id","name","category.name"]);
 const searchItem=ref();
 
@@ -66,6 +66,10 @@ if(page.props.flash.status==true){
     </template>
 
 </EasyDataTable>
+<div class="flex justify-end gap-2">
+    <Link class="bg-blue-500 text-white font-bold py-2 px-4 rounded" v-if="page.props.products.next_page_url" :href="page.props.products.next_page_url">Next</Link>
+<Link class="bg-blue-500 text-white font-bold py-2 px-4 rounded" v-if="page.props.products.prev_page_url" :href="page.props.products.prev_page_url">prev</Link>
+</div>
 </template>
 
 <style scoped>

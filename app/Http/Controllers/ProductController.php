@@ -94,7 +94,7 @@ class ProductController extends Controller
     //list product
     public function listProduct()
     {
-        $products = Product::with('category')->get();
+        $products = Product::with('category')->paginate(100);
         return Inertia::render('Products/ProductListPage', ['products' => $products]);
     }
 
