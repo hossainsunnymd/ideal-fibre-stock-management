@@ -43,15 +43,6 @@ if(page.props.flash.status==true){
         >
     </div>
 
-    <!-- Add Product Button -->
-    <div>
-        <Link
-            :href="`/product-save-page?product_id=${0}`"
-            class="bg-green-500 text-white py-2 px-4 rounded text-center block md:inline-block"
-        >
-            Add Product
-        </Link>
-    </div>
 </div>
 
 <EasyDataTable :headers="headers" :items="items" alternating :rows-per-page="5" :search-field="searchField" :search-value="searchItem">

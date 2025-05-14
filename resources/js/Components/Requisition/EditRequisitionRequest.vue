@@ -13,7 +13,11 @@ const form = useForm({
 
 
 function submitForm() {
+  if(form.received_qty<=0){
+      toaster.error('Received quantity must be greater than 0');
+      return;
 
+  }
   form.post('/update-requisition-request', {
     preserveScroll: true,
     onSuccess: () => {
@@ -36,7 +40,7 @@ function submitForm() {
 
     <div>
       <label for="received_qty" class="block text-sm font-medium text-gray-700 mb-1">Received Quantity</label>
-      <input v-model="form.received_qty" type="text"
+      <input v-model="form.received_qty" type="number"
              class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400" />
 
     </div>

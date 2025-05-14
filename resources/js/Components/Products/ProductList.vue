@@ -18,7 +18,7 @@ const headers = [
     {text:'Action',value:'action'},
 ]
 const items=ref(page.props.products);
-const searchField = ref(["id","name"]);
+const searchField = ref(["id","name","category.name"]);
 const searchItem=ref();
 
 function deleteProduct(porduct_id){
@@ -62,7 +62,7 @@ if(page.props.flash.status==true){
     <template #item-action="{ id }">
         <Link v-if="page.props.user.role!='moderator'" :href="`/product-save-page?product_id=${id}`" class="bg-blue-500 text-white font-bold py-2 px-4 rounded">Edit</Link>
         <button v-if="page.props.user.role!='moderator'" @click="deleteProduct(id)" class="bg-red-500 text-white font-bold py-2 px-4 rounded ml-1">Delete</button>
-        <Link :href="`/product-issue-page?product_id=${id}`" class="bg-indigo-500 text-white font-bold py-2 px-4 rounded ml-1">Issue</Link>
+        <Link v-if="page.props.user.role!='admin'" :href="`/product-issue-page?product_id=${id}`" class="bg-indigo-500 text-white font-bold py-2 px-4 rounded ml-1">Issue</Link>
     </template>
 
 </EasyDataTable>

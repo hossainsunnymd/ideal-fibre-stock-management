@@ -17,7 +17,7 @@ const headers = [
 
 const items=ref(page.props.productList);
 const modal = ref(false);
-const searchField = ref(["available_unit","product_name","total_received","total_issue"]);
+const searchField = ref(["available_unit","product_name","total_received","total_issue","parts_no","rack_no","column_no","row_no"]);
 const searchItem=ref();
 const fromDate=new URLSearchParams(window.location.search).get('fromDate');
 const toDate=new URLSearchParams(window.location.search).get('toDate');
@@ -116,7 +116,13 @@ function showModal(){
 </div>
 
 
-  <p>Period : {{ fromDate?fromDate:'-' }} To {{ toDate?toDate:'-' }}</p>
+  <p>
+  Period :
+  {{ fromDate ? new Date(fromDate).toLocaleString().split(',')[0] : '-' }}
+  To
+  {{ toDate ? new Date(toDate).toLocaleString().split(',')[0] : '-' }}
+</p>
+
   <p>Selected Category : {{ category_name?category_name:'-' }} </p>
 <EasyDataTable :headers="headers" :items="items" alternating :rows-per-page="5" :search-field="searchField" :search-value="searchItem">
 

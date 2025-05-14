@@ -31,6 +31,10 @@ function showModal(id) {
 
 
 function confirmAction() {
+    if(form.received_qty<=0){
+        toaster.error('Received quantity must be greater than 0');
+        return;
+    }
   if(confirm('Are you sure you want to received this product?')) {
     form.post('/requisition-received-request',{
         preserveScroll: true,
@@ -73,7 +77,7 @@ function confirmAction() {
       <div class="bg-white w-full max-w-md rounded-lg shadow-lg p-6 relative">
         <h2 class="text-xl font-semibold mb-4">Received Qty</h2>
 
-        <input v-model="form.received_qty" class="border border-gray-300 rounded-md px-4 py-2 w-full" type="text">
+        <input v-model="form.received_qty" class="border border-gray-300 rounded-md px-4 py-2 w-full" type="number">
 
         <!-- Action buttons -->
         <div class="flex justify-end mt-6 space-x-2">

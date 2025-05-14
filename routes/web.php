@@ -29,11 +29,7 @@ Route::middleware([TokenVerificationMiddleWare::class])->group(function () {
     Route::get('/product-stock-list', [ProductController::class, 'productStockList'])->name('product.stock.list');
     Route::get('/list-product', [ProductController::class, 'listProduct'])->name('product.list');
     Route::post('/create-product', [ProductController::class, 'createProduct'])->name('product.create');
-
-
-    //issue product
-    Route::get('/product-issue-page', [ProductController::class, 'productIssuePage'])->name('product.issue.page');
-    Route::post('/issue-product', [ProductController::class, 'issueProduct'])->name('product.issue');
+    Route::get('/product-save-page', [ProductController::class, 'productSavePage'])->name('product.save.page');
 
     //issue product list
     Route::get('/issue-product-list', [ProductController::class, 'issueProductList'])->name('product.issue.list');
@@ -47,6 +43,7 @@ Route::middleware([TokenVerificationMiddleWare::class])->group(function () {
     //categories
     Route::get('/list-category', [CategoryController::class, 'listCategory'])->name('category.list');
     Route::post('/create-category', [CategoryController::class, 'createCategory'])->name('category.create');
+    Route::get('/category-save-page', [CategoryController::class, 'categorySavePage'])->name('category.save.page');
 
 
     //list requisitions
@@ -61,6 +58,10 @@ Route::middleware([TokenVerificationMiddleWare::class, ModeratorMiddleware::clas
     Route::post('/create-requisition', [RequisitionController::class, 'createRequisition'])->name('requisition.create');
     Route::get('/requisition-product-list', [RequisitionController::class, 'requisitionProductList'])->name('requisition.product.list');
     Route::post('/requisition-received-request', [RequisitionController::class, 'requisitionReceivedRequest'])->name('requisition.received.request');
+
+    //issue product
+    Route::post('/issue-product', [ProductController::class, 'issueProduct'])->name('product.issue');
+    Route::get('/product-issue-page', [ProductController::class, 'productIssuePage'])->name('product.issue.page');
 });
 
 //super admin access
@@ -92,12 +93,10 @@ Route::middleware([TokenVerificationMiddleWare::class, AdminMiddleware::class])-
     Route::get('/delete-purchase', [PurchaseController::class, 'deletePurchase'])->name('purchase.delete');
 
     //products
-     Route::post('/update-product', [ProductController::class, 'updateProduct'])->name('product.update');
-     Route::get('/delete-product', [ProductController::class, 'deleteProduct'])->name('product.delete');
-     Route::get('/product-save-page', [ProductController::class, 'productSavePage'])->name('product.save.page');
+    Route::post('/update-product', [ProductController::class, 'updateProduct'])->name('product.update');
+    Route::get('/delete-product', [ProductController::class, 'deleteProduct'])->name('product.delete');
 
-     //category
+    //category
     Route::post('/update-category', [CategoryController::class, 'updateCategory'])->name('category.update');
     Route::get('/delete-category', [CategoryController::class, 'deleteCategory'])->name('category.delete');
-    Route::get('/category-save-page', [CategoryController::class, 'categorySavePage'])->name('category.save.page');
 });
