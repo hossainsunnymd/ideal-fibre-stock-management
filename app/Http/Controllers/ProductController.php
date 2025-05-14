@@ -9,7 +9,6 @@ use App\Models\Category;
 use App\Models\IssueProduct;
 use Illuminate\Http\Request;
 use App\Models\DamageProduct;
-use App\Models\PurchaseProduct;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use App\Models\RequisitionReceivedRequest;
@@ -20,42 +19,33 @@ class ProductController extends Controller
     //Product stock list
     public function productStockList(Request $request)
     {
-        $categories = Category::all();
+        $categories = Category::select('id', 'name')->get();
         $fromDate = $request->query('fromDate');
         $toDate = $request->query('toDate');
+        $fd = $fromDate ? date('Y-m-d', strtotime($fromDate)) : '';
+        $td = $toDate ? date('Y-m-d', strtotime($toDate)) : '';
         $categoryId = $request->query('category_id');
-        $category_name = '';
-        if ($categoryId) {
-            $category_name = Category::where('id', $categoryId)->first()->name;
-        }
 
-        $products = Product::when($categoryId, function ($query) use ($categoryId) {
-            $query->where('category_id', $categoryId);
-        })->get();
+
+        $products = Product::with('category')
+            ->when($categoryId, function ($query) use ($categoryId) {
+                $query->where('category_id', $categoryId);
+            })->get();
+
 
 
         // Calculate total received, issue
-        $receivedSums = RequisitionReceivedRequest::when($fromDate && $toDate, function ($query) use ($fromDate, $toDate) {
-            $fd = date('Y-m-d', strtotime($fromDate));
-            $td = date('Y-m-d', strtotime($toDate));
+        $receivedSums = RequisitionReceivedRequest::when($fd && $td, function ($query) use ($fd, $td) {
             $query->whereDate('created_at', '>=', $fd)->whereDate('created_at', '<=', $td);
-        })->when($categoryId, function ($query) use ($categoryId) {
-            $query->where('category_id', $categoryId);
-        })
-            ->where('status', 'approved')
+        })->where('status', 'approved')
             ->select('product_id', DB::raw('SUM(received_qty) as total_received'))
             ->groupBy('product_id')
             ->pluck('total_received', 'product_id');
 
 
-        $issueSums = IssueProduct::when($fromDate && $toDate, function ($query) use ($fromDate, $toDate) {
-            $fd = date('Y-m-d', strtotime($fromDate));
-            $td = date('Y-m-d', strtotime($toDate));
+        $issueSums = IssueProduct::when($fd && $td, function ($query) use ($fd, $td) {
             $query->whereDate('created_at', '>=', $fd)->whereDate('created_at', '<=', $td);
-        })->when($categoryId, function ($query) use ($categoryId) {
-            $query->where('category_id', $categoryId);
-        })
-            ->select('product_id', DB::raw('SUM(unit) as total_issue'))
+        })->select('product_id', DB::raw('SUM(unit) as total_issue'))
             ->groupBy('product_id')
             ->pluck('total_issue', 'product_id');
 
@@ -86,7 +76,7 @@ class ProductController extends Controller
         return Inertia::render('Products/ProductStockListPage', [
             'productList' => $productList,
             'categories' => $categories,
-            'category_name' => $category_name,
+            'category_name' => $categoryId ? $products[0]->category->name : '',
         ]);
     }
 
@@ -94,7 +84,7 @@ class ProductController extends Controller
     //list product
     public function listProduct()
     {
-        $products = Product::with('category')->paginate(100);
+        $products = Product::with('category')->latest()->get();
         return Inertia::render('Products/ProductListPage', ['products' => $products]);
     }
 
@@ -117,7 +107,6 @@ class ProductController extends Controller
     {
         try {
             $product = Product::findOrFail($request->product_id);
-            $category_id = $product->category_id;
             $exist_qty = $product->unit;
             $damage_qty = $request->damage ?? 0;
             $issue_qty = $request->issue ?? 0;
@@ -127,7 +116,6 @@ class ProductController extends Controller
                 DamageProduct::create([
                     'product_id' => $product->id,
                     'unit' => $damage_qty,
-                    'category_id' => $category_id,
                 ]);
             }
 
@@ -142,7 +130,6 @@ class ProductController extends Controller
                     IssueProduct::create([
                         'product_id' => $product->id,
                         'unit' => $issue_qty,
-                        'category_id' => $category_id,
                     ]);
 
                     $product->decrement('unit', $issue_qty);
@@ -162,7 +149,7 @@ class ProductController extends Controller
     public function minimumProductList(Request $request)
     {
 
-        $products = Product::whereColumn('unit', '<=', 'minimum_stock')->with('category')->get();
+        $products = Product::whereColumn('unit', '<=', 'minimum_stock')->with('category')->latest()->get();
         return Inertia::render('Products/MinimumStockListPage', ['products' => $products]);
     }
 
@@ -179,7 +166,7 @@ class ProductController extends Controller
 
             $query->whereDate('created_at', '>=', $fd)
                 ->whereDate('created_at', '<=', $td);
-        })->with('product')->get();
+        })->with('product')->latest()->paginate(500);
 
         return Inertia::render('Products/ProductIssuePage', ['issueProducts' => $issueProducts, 'fromDate' => $fromDate, 'toDate' => $toDate]);
     }
@@ -197,7 +184,7 @@ class ProductController extends Controller
 
             $query->whereDate('created_at', '>=', $fd)
                 ->whereDate('created_at', '<=', $td);
-        })->with('product')->get();
+        })->with('product')->latest()->paginate(500);
         return Inertia::render('Products/DamageProductPage', ['damageProducts' => $damageProducts]);
     }
 
@@ -206,15 +193,15 @@ class ProductController extends Controller
     {
 
 
-        $validator = Validator::make($request->all(),[
+        $validator = Validator::make($request->all(), [
             'name' => 'required',
             'unit' => 'required|numeric|min:1',
             'unit_type' => 'required',
             'category_id' => 'required',
             'minimum_stock' => 'required|numeric|min:1',
         ]);
-        if($validator->fails()){
-           return redirect()->back()->with(['errors' => $validator->errors()]);
+        if ($validator->fails()) {
+            return redirect()->back()->with(['errors' => $validator->errors()]);
         }
 
         try {
@@ -240,20 +227,20 @@ class ProductController extends Controller
     public function updateProduct(Request $request)
     {
 
-        $validator = Validator::make($request->all(),[
+        $validator = Validator::make($request->all(), [
             'name' => 'required',
             'unit' => 'required|numeric|min:1',
             'unit_type' => 'required',
             'category_id' => 'required',
             'minimum_stock' => 'required|numeric|min:1'
         ]);
-        if($validator->fails()){
+        if ($validator->fails()) {
 
-           return redirect()->back()->with(['errors' => $validator->errors()]);
+            return redirect()->back()->with(['errors' => $validator->errors()]);
         }
 
         try {
-           $data = [
+            $data = [
                 'name' => $request->name,
                 'category_id' => $request->category_id,
                 'unit' => $request->unit,

@@ -15,12 +15,9 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('requisitionProduct_id');
             $table->unsignedBigInteger('product_id');
-            $table->unsignedBigInteger('category_id');
             $table->foreign('requisitionProduct_id')->references('id')->on('requisition_products')
             ->restrictOnDelete()->cascadeOnUpdate();
             $table->foreign('product_id')->references('id')->on('products')
-            ->restrictOnDelete()->cascadeOnUpdate();
-            $table->foreign('category_id')->references('id')->on('categories')
             ->restrictOnDelete()->cascadeOnUpdate();
             $table->decimal('received_qty',15,2);
             $table->string('status')->default('pending');

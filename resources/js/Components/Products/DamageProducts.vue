@@ -13,7 +13,7 @@ const formatDate = (date) => {
   const d = new Date(date).toLocaleString();
   return d;
 };
-const items=ref(page.props.damageProducts);
+const items=ref(page.props.damageProducts.data);
 const searchField = ref(["id","product.name"]);
 const searchItem=ref();
 
@@ -82,6 +82,24 @@ function submitForm() {
           {{ formatDate(created_at) }}
     </template>
 </EasyDataTable>
+<div class="flex justify-center gap-4 mt-6">
+  <Link
+    v-if="page.props.damageProducts.prev_page_url"
+    :href="page.props.damageProducts.prev_page_url"
+    class="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-md shadow-sm transition"
+  >
+    ← Prev
+  </Link>
+
+  <Link
+    v-if="page.props.damageProducts.next_page_url"
+    :href="page.props.damageProducts.next_page_url"
+    class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-md shadow-sm transition"
+  >
+    Next →
+  </Link>
+</div>
+
 </template>
 
 <style scoped>

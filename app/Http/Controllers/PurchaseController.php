@@ -21,7 +21,7 @@ class PurchaseController extends Controller
             $td = date('Y-m-d', strtotime($toDate));
             $query->whereDate('created_at', '>=', $fd)
                 ->whereDate('created_at', '<=', $td);
-        })->get();
+        })->latest()->paginate(500);
         return Inertia::render('Purchase/PurchaseListPage', ['purchases' => $purchases]);
     }
 

@@ -15,7 +15,7 @@ const headers = [
     { text: 'Total By Coel', value: 'total_by_coel' },
     { text: 'Action', value: 'action' },
 ]
-const items=ref(page.props.requisitions);
+const items=ref(page.props.requisitions.data);
 const searchField = ref("id");
 const searchItem=ref();
 
@@ -55,6 +55,25 @@ if(page.props.flash.status==true){
     </template>
 </EasyDataTable>
 <Link v-if="page.props.user.role!='admin'" :href="`/requisition-save-page`" class="bg-green-500 text-white  py-2 px-4 rounded w-[200px]">Create new Requisition</Link>
+
+<div class="flex justify-end gap-4 mt-6">
+  <Link
+    v-if="page.props.requisitions.prev_page_url"
+    :href="page.props.requisitions.prev_page_url"
+    class="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-md shadow-sm transition"
+  >
+    ← Prev
+  </Link>
+
+  <Link
+    v-if="page.props.requisitions.next_page_url"
+    :href="page.props.requisitions.next_page_url"
+    class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-md shadow-sm transition"
+  >
+    Next →
+  </Link>
+</div>
+
 </template>
 
 <style scoped>

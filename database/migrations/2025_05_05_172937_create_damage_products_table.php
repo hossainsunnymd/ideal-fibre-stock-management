@@ -14,10 +14,7 @@ return new class extends Migration
         Schema::create('damage_products', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('product_id');
-            $table->unsignedBigInteger('category_id');
             $table->foreign('product_id')->references('id')->on('products')
-            ->restrictOnDelete()->cascadeOnUpdate();
-            $table->foreign('category_id')->references('id')->on('categories')
             ->restrictOnDelete()->cascadeOnUpdate();
             $table->decimal('unit',15,2);
             $table->timestamp('created_at')->useCurrent();

@@ -16,6 +16,7 @@ const headers = [
 ]
 
 const items=ref(page.props.productList);
+console.log(items.value);
 const modal = ref(false);
 const searchField = ref(["available_unit","product_name","total_received","total_issue","parts_no","rack_no","column_no","row_no"]);
 const searchItem=ref();

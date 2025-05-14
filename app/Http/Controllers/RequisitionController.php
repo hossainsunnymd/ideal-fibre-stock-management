@@ -16,7 +16,7 @@ class RequisitionController extends Controller
     //list requisition
     public function listRequisition()
     {
-        $requisitions = Requisition::with('requisitionProducts.product')->get();
+        $requisitions = Requisition::with('requisitionProducts.product')->latest()->paginate(500);
 
         return Inertia::render('Requisition/RequisitionListPage', ['requisitions' => $requisitions]);
     }
@@ -67,12 +67,10 @@ class RequisitionController extends Controller
 
        try{
          $productId=RequisitionProduct::where('id', $request->requisition_product_id)->first()->product_id;
-         $categoryId=Product::where('id', $productId)->first()->category_id;
          RequisitionReceivedRequest::create([
             'requisitionProduct_id' => $request->requisition_product_id,
             'received_qty' => $request->received_qty,
-            'product_id' => $productId,
-            'category_id' => $categoryId,
+            'product_id' => $productId
         ]);
         RequisitionProduct::where('id', $request->requisition_product_id)->update([
             'status' => 'received',
